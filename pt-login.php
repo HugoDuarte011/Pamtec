@@ -9,8 +9,8 @@
 
         if (!$conn) die('Could not connect: ' . mysql_error());
 
-        $user = $_POST['user']);
-        $pass = $_POST['pass']);
+        $user = $_POST['user'];
+        $pass = $_POST['pass'];
 
         $sql = "SELECT `user_login` FROM `apswp_users` WHERE `user_login` = ? AND `user_pass` = ?";
         $sth = $conn->prepare($sql);
