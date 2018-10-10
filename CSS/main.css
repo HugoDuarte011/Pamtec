@@ -1,1 +1,30 @@
-/*CSS Pamtec*/
+:root {
+  --margin: 3px;
+}
+body {
+  padding: 2%;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 75px 350px 750px;
+  grid-template-rows: 60px 60px 60px 60px 60px;
+  grid-column-gap: var(--margin);
+  grid-row-gap: var(--margin);
+}
+
+.box .boxHEADER {
+  background-color: #1e73be;
+  color: white;
+  grid-column: 1/3; // COLUNA: COMECA/TERMINA
+  grid-row: 1/1; // LINHAS: COMECA/TERMINA
+}
+
+.box .boxFOOTER {
+  background-color: #1e73be;
+  color: white;
+}
+
+.box {
+  border-radius: 5px;
+}

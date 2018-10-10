@@ -1,0 +1,310 @@
+/*
+Theme Name: Live Portfolio
+Template: meditation
+Author: Cats_456
+Author URI: https://visualpharm.com/wpblogs/themes/
+Theme URI: https://visualpharm.com/wpblogs/themes/theme/liveportfolio/
+Description: Live Portfolio is a simple and beautiful portfolio theme with css3 effects, custom colors and other options in the customiser. See the demo at http://wpblogs.info/demo/liveportfolio/
+Version: 1.0.2
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: left-sidebar, right-sidebar, one-column, two-columns, three-columns, grid-layout, custom-logo, custom-background, custom-header, custom-menu, sticky-post, footer-widgets, flexible-header, full-width-template, featured-images, sticky-post, translation-ready, custom-colors, theme-options, threaded-comments, blog, news, portfolio
+Text Domain: live-portfolio
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+*/
+
+.flex-container .entry-title a {
+	font-size: 28px;
+	line-height: 1.2857;
+}
+.flex-container .content-container .entry-summary,
+.flex-container .content-container .entry-content {
+	display: none;
+}
+.flex-container .content-container:hover .hover-link {
+	background: rgba(255,255,255,0.7);
+}
+.entry-title a {
+	background: rgba(255,255,255,0.7);
+	padding: 6px;
+	margin: 6px;
+}
+.flex .category-list {
+	display: block;
+	margin: 0 6px;
+}
+.flex-container .content-container:hover .category-list a,
+.flex-container .content-container:hover .entry-meta a,
+.flex-container .content-container:hover .entry-summary,
+.flex-container .content-container:hover .entry-content,
+.flex-container .content-container:hover .entry-title a {
+	position: relative;
+	z-index: 1;
+}
+.flex-container .content-container {
+	position: relative;
+}
+.hover-link {
+	display: block;
+	position: absolute;
+	top: 50%;
+	bottom: 50%;
+	right: 50%;
+	left: 50%;
+	-webkit-transition: all 0.4s ease-out;
+	transition: all 0.4s ease-out;
+}
+.flex-container .content-container:hover .hover-link {
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 0;
+}
+@media screen and (min-width: 680px) {
+	.flex .category-list {
+		margin: 0;
+	}
+	
+	/* Blog Hover Effect */
+	.flex-container .content-container .entry-summary,
+	.flex-container .content-container .entry-content,
+	.flex-container .content-container .entry-meta {
+		opacity: 0;
+	}
+
+	.site .flex-container .content-container .entry-summary,
+	.site .flex-container .content-container .entry-content,
+	.site .flex-container .content-container .entry-meta {
+		-webkit-transition: all 1s ease-in-out 0s;
+		transition: all 1s ease-in-out 0s;
+	}
+
+	.flex-container .content-container:hover .entry-summary,
+	.flex-container .content-container:hover .entry-content,
+	.flex-container .content-container:hover .entry-meta {
+		opacity: 1;
+		-webkit-transition: all 1s;
+		transition: all 1s;
+	}
+	
+	.flex-container .content-container .entry-summary,
+	.flex-container .content-container .entry-content {
+		color: #333;
+		margin-top: 24px;
+		text-shadow: 0px 2px 2px rgba(255, 255, 255, 0.4); 
+	}
+	
+	.flex-container .content-container:hover .category-list a,
+	.flex-container .content-container:hover .entry-title a {
+		box-shadow: 0 10px 6px -6px #777;
+	 }
+
+	.header-effect-1 .site .image-text-wrap {	
+		-ms-transform: translate(-100%, 0);
+		-webkit-transform: translate(-100%, 0);
+		 transform: translate(-100%, 0);
+	}
+
+	/* Menu */
+	.site .horisontal-navigation > div > ul > li:hover:before {
+		background-color: #fff;
+	}
+
+	/* Site Title */
+		
+	.site .site-title a:before {
+		right: 50%;
+	}
+
+	.site .site-title a:after {
+		left: 50%;
+	}
+	.site .site-title a:after, 
+	.site .site-title a:before {
+		background-color: white;
+		top: -24px;
+		-ms-transform: rotateX(0);
+		-webkit-transform: rotateX(0);
+		 transform: rotateX(0);
+	}
+
+	.site .site-title a:hover:after, 
+	.site .site-title a:hover:before {
+		background-color: red;
+		top: -12px;	
+	}
+
+	/* Link */
+
+	.site .post-date:after {
+		width: 0;
+	}
+	.site .entry-title a:after {
+		width: 1px;
+	}
+	.site .post-date:after,
+	.site .entry-title a:hover:after {
+		width: 4px;
+	}
+		
+		
+	/* Header */
+	.site .image-text-wrap:before {
+		content: none;
+	}
+
+}
+@media screen and (min-width: 960px) {
+	.flex-container .content-container .entry-summary,
+	.flex-container .content-container .entry-content {
+		display: block;
+	}
+	/* effect 4 */
+	.header-effect-4 .image-wrapper:before {
+		-webkit-transition-delay: 2s !important;
+		-moz-transition-delay: 2s !important;
+		-o-transition-delay: 2s !important;
+		transition-delay: 2s !important;
+		-webkit-transition: all 1.3s ease-out;
+		transition: all 1.3s ease-out;
+	}
+	.header-effect-4 .image-text {
+		-webkit-transition-delay: 2s !important;
+		-moz-transition-delay: 2s !important;
+		-o-transition-delay: 2s !important;
+		transition-delay: 2s !important;
+		-webkit-transition: all 0.2s ease-out;
+		transition: all 0.2s ease-out;
+	}
+	.header-effect-4 .sidebar-header {
+		-webkit-transition-delay: 1s;
+		-moz-transition-delay: 1s;
+		-o-transition-delay: 1s;
+		transition-delay: 1s;
+	}
+	.header-effect-4 .site-description {
+		-webkit-transition-delay: 0.5s;
+		-moz-transition-delay: 0.5s;
+		-o-transition-delay: 0.5s;
+		transition-delay: 0.5s;
+		-webkit-transition: all 0.3s ease-out;
+		transition: all 0.3s ease-out;
+	}
+	.header-effect-4 .site-description:before {
+		-webkit-transition: all 2s ease-out;
+		transition: all 2s ease-out;
+	}
+	.header-effect-4 .image-text {	
+		-ms-transform: translate(-100%, 0);
+		-webkit-transform: translate(-100%, 0);
+		 transform: translate(-100%, 0);
+	}
+
+	.animate-on-load.header-effect-4 .image-text {	
+		-ms-transform: translate(-50%, 0);
+		-webkit-transform: translate(-50%, 0);
+		 transform: translate(-50%, 0);
+	}
+	.animate-on-load.header-effect-4 .site-description,
+	.animate-on-load.header-effect-4 .sidebar-header {
+		 opacity: 0;
+	}
+	.header-effect-4 .site-description:before,
+	.header-effect-4 .image-wrapper:before {
+		background: inherit;
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: 0;
+		right: 0;
+		top: 0;
+	}
+	.hesader-effect-4 .site-description:before,
+	.header-effect-4 .image-wrapper:before {
+		background: rgba(0,0,0,0);
+	}
+	.header-effect-4 .image-wrapper:before {
+		height: 100%;		
+		width: 100%;
+		top: 0;
+	}
+	.animate-on-load.header-effect-4 .site-description:before,
+	.animate-on-load.header-effect-4 .image-wrapper:before {	
+		background: inherit;
+		height: 100%;
+		width: 100%;
+		left: 0;
+		right: 0;
+	}
+	.animate-on-load.header-effect-4 .image-wrapper:before {
+		background: rgba(0,0,0,0.9) !important;
+	}
+
+	.animate-on-load.header-effect-4 .site-title,
+	.animate-on-load.header-effect-4 .site-description,
+	.animate-on-load.header-effect-4 .sidebar-header {
+		 opacity: 0;
+	}
+	.header-effect-4 .site-title,
+	.header-effect-4 .site-description {
+		position: relative;
+	}
+	.header-effect-4 .site-title:before,
+	.header-effect-4 .site-description:before {
+		background: inherit;
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: 0;
+		right: 0;
+		top: 0;
+		z-index: 3;
+	}
+	.animate-on-load.header-effect-4 .site-title:before,
+	.animate-on-load.header-effect-4 .site-description:before {	
+		background: inherit;
+		height: 100%;
+		width: 100%;
+		left: 0;
+		right: 0;
+	}
+	.animate-on-load.header-effect-1 .site .image-text-wrap {	
+		-ms-transform: translate(-50%, 0);
+		-webkit-transform: translate(-50%, 0);
+		 transform: translate(-50%, 0);
+	}
+}
+
+.widget.widget_media_image {
+	text-align: center;
+}
+.widget.widget_media_image img {
+	display: inline-block;
+}
+.btn-group button{
+	background-image:none; /* Remove backgroud image */
+	text-shadow: none; /* Remove text */
+	border: 1px solid blue; /* Blue border */
+    color: white; /* White text */
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+}
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.btn-group button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+    background-color: darkblue;
+}
