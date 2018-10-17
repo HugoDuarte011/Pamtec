@@ -21,4 +21,6 @@ $password = DB_PASSWORD;
 $conn = mysqli_connect($servername,$username,$password, $database);
 if (mysqli_connect_errno()) die(mysqli_connect_error());
 
+// Criar uma página de falha de conexão
+
 ?>

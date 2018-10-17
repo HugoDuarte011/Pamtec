@@ -27,6 +27,9 @@ define('DB_CHARSET', 'utf8mb4');
 /** The Database Collate type. Don't change this if in doubt. */
 define('DB_COLLATE', '');
 
+/** ROUTER */
+define('ROUTER', (__DIR__).'/_pamtecsite_/templats/');
+
 /**#@+
  * Authentication Unique Keys and Salts.
  *
@@ -36,8 +39,8 @@ define('DB_COLLATE', '');
  *
  */
 define('AUTH_KEY',         '2I{4MN4.[/cQ8L$y/)_21M4wVwi-5Zs9Bt{C8~HpE%D ]nIQHun+?Ff=HoyF[V!c');
-define('SECURE_AUTH_KEY',  'K,hc`mR3,y_X%e^Fp,,cG8LZ0=Nn/XRv6&PAi{.N|x(-:8s_IL&p)]^Kx|sG]__8');
-define('LOGGED_IN_KEY',    '|;}[ NpE>nZEO_fu+ze*]gA!Og?kD#f4R@OA9<T4Z%g[NH|=SR$+C^_Q^DXs7iq3');
+define('SECURE_AUTH_KEY',  pack('a16', 'K,hc`mR3,y_X%e^Fp,,cG8LZ0=Nn/XRv6&PAi{.N|x(-:8s_IL&p)]^Kx|sG]__8'));
+define('LOGGED_IN_KEY',    pack('a16', '|;}[ NpE>nZEO_fu+ze*]gA!Og?kD#f4R@OA9<T4Z%g[NH|=SR$+C^_Q^DXs7iq3'));
 define('NONCE_KEY',        '!o/-#AXWsU>v6`5d&-/QR{gUmj~E8;N[nQEpXoi),y}a|TOY(= +NCaYHHX]+6*Z');
 define('AUTH_SALT',        'o|0;!NY_BcffA5]m3)vbclc2?or6K1Z(L=4&PVrN{CzWBTYa}};f:[47[L.$vMx.');
 define('SECURE_AUTH_SALT', 'h738#`O8GrMXbdG0`o:;c/39!o;J~QAW>KHF/#zi*u;6)iYfv|A+5L]|X#[y7[,I');
