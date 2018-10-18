@@ -12,10 +12,27 @@
     $REQUEST_URI_FOLDER = substr($REQUEST_URI, 1);
 
     $URL = explode('/', $REQUEST_URI_FOLDER);
-    $URL[1] = ($URL[1] != '' ? $URL[1] : 'home');
+    $URL[0] = ($URL[0] != '' ? $URL[0] : 'home');
 
-    $title = $URL[1];
-    $menu = $URL[1];
+    switch($URL[0]){
+        case 'home';
+            $title = "Início";
+            break;
+
+        case 'calibracao';
+            $title = "Calibração";
+            break;
+        
+        case 'contato';
+            $title = "Contato";
+            break;
+
+        case 'login';
+            $title = 'Login';
+            break;
+    }
+
+    $menu = $title;
 
 ?>
 <!DOCTYPE html>
