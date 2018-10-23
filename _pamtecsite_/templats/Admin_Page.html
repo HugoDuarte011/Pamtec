@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+			body {
+				font-family: Arial;
+			}
+
+
+			/* Style the tab */
+
+			.tab {
+				overflow: hidden;
+				border: 1px solid #ccc;
+				background-color: #f1f1f1;
+			}
+
+
+			/* Style the buttons inside the tab */
+
+			.tab button {
+				background-color: inherit;
+				float: left;
+				border: none;
+				outline: none;
+				cursor: pointer;
+				padding: 14px 16px;
+				transition: 0.3s;
+				font-size: 17px;
+			}
+
+
+			/* Change background color of buttons on hover */
+
+			.tab button:hover {
+				background-color: #ddd;
+			}
+
+
+			/* Create an active/current tablink class */
+
+			.tab button.active {
+				background-color: #ccc;
+			}
+
+
+			/* Style the tab content */
+
+			.tabcontent {
+				display: none;
+				padding: 6px 12px;
+				border: 1px solid #ccc;
+				border-top: none;
+			}
+		</style>
+	</head>
+	<body>
+		<h2>Tipo de Registro</h2>
+		<p>Selecione o tipo de registro que será visualizado: </p>
+		<div class="tab">
+		   <button class="tablinks" onclick="tipoRegistro(event, 'Clientes')">Clientes</button>
+		   <button class="tablinks" onclick="tipoRegistro(event, 'Certificados')">Certificados</button>
+		</div>
+		<div id="Clientes" class="tabcontent">
+			<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+			<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+			<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+			<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+			<div class="w3-container">
+			  <h2>Lista de Usuários para edição</h2>
+			  <table class="w3-table w3-striped w3-border">
+				<tr>
+				  <th>Nome</th>
+				  <th>CNPJ</th>
+				  <th>Email</th>
+				</tr>
+				<?php 
+					$sql = mysqli_query($connection, "SELECT * FROM usuers");
+					while ($row = $sql->fetch_assoc()){
+				?>
+				<tr>
+					<td>name</td>
+					<td>cnpj</td>
+					<td>email</td>
+					<td>
+						<a href="user.html"><i class="icon-pencil"></i></a>
+						<a href="#myModal" role="button" data-toggle="modal"><i class="icon-remove"></i></a>
+					</td>
+				</tr>
+				<?php
+					}
+				?>
+			  </table>
+			</div>
+		</div>
+		<div id="Certificados" class="tabcontent">
+		   <h3>Certificados</h3>
+		   <div class="w3-container">
+		  <h2>Lista de Usuários para edição</h2>
+		  <table class="w3-table w3-striped w3-border">
+			<tr>
+			  <th>Nome</th>
+			  <th>Destinatário</th>
+			  <th>Data de Upload</th>
+			</tr>
+			<?php 
+				$sql = mysqli_query($connection, "SELECT * FROM wp_files");
+				while ($row = $sql->fetch_assoc()){
+			?>
+			<tr>
+				<td>filename</td>
+				<td>destination</td>
+				<td>uploaddate</td>
+				<td>
+					<a href="user.html"><i class="icon-pencil"></i></a>
+					<a href="#myModal" role="button" data-toggle="modal"><i class="icon-remove"></i></a>
+				</td>
+			</tr>
+			<?php
+				}
+			?>
+		  </table>
+		</div>
+		</div>
+		<script>
+			function tipoRegistro(evt, tipoReg) {
+				var i, tabcontent, tablinks;
+				tabcontent = document.getElementsByClassName("tabcontent");
+				for (i = 0; i < tabcontent.length; i++) {
+					tabcontent[i].style.display = "none";
+				}
+				tablinks = document.getElementsByClassName("tablinks");
+				for (i = 0; i < tablinks.length; i++) {
+					tablinks[i].className = tablinks[i].className.replace(" active", "");
+				}
+				document.getElementById(tipoReg).style.display = "block";
+				evt.currentTarget.className += " active";
+			}
+		</script>
+	</body>
+</html> 
