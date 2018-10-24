@@ -78,14 +78,15 @@
 				  <th>CNPJ</th>
 				  <th>Email</th>
 				</tr>
-				<?php 
-					$sql = mysqli_query($connection, "SELECT * FROM usuers");
-					while ($row = $sql->fetch_assoc()){
-				?>
-				<tr>
-					<td>name</td>
-					<td>cnpj</td>
-					<td>email</td>
+					<?php 
+						$sql = "SELECT * FROM aswp_users"
+						$result = mysql_query($sql);
+						while($row = mysql_fetch_array($result)) {
+					?>
+					<tr>
+					<td><?php echo $row['display_name'];?></td>
+					<td><?php echo $row['user_cnpj'];?></td>
+					<td><?php echo $row['user_email'];?></td>
 					<td>
 						<a href="user.html"><i class="icon-pencil"></i></a>
 						<a href="#myModal" role="button" data-toggle="modal"><i class="icon-remove"></i></a>
@@ -110,13 +111,14 @@
 			  <th>Data de Upload</th>
 			</tr>
 			<?php 
-				$sql = mysqli_query($connection, "SELECT * FROM wp_files");
-				while ($row = $sql->fetch_assoc()){
+				$sql = "SELECT * FROM aswp_arquivos"
+				$result = mysql_query($sql);
+				while($row = mysql_fetch_array($result)) {
 			?>
 			<tr>
-				<td>filename</td>
-				<td>destination</td>
-				<td>uploaddate</td>
+				<td><?php echo $row['nome_arquivo'];?></td>
+				<td><?php echo $row['fk_cliente'];?></td>
+				<td><?php echo $row['uploaddate'];?></td>
 				<td>
 					<a href="user.html"><i class="icon-pencil"></i></a>
 					<a href="#myModal" role="button" data-toggle="modal"><i class="icon-remove"></i></a>
