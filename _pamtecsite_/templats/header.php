@@ -1,3 +1,4 @@
+
 <div class="col-xs-12">
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
 		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
@@ -22,7 +23,20 @@
 					<a class="nav-link" href='contato'>Contato</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href='login'>Login</a>
+					<?php
+						$session_menu = '';
+						$session_href = '';
+
+						if(isset( $_SESSION['user_id'])) {
+							$session_menu = 'Admin';
+							$session_href = 'Admin_Page';
+						} else {
+							$session_menu = 'login';
+							$session_href = 'login';
+						}
+						
+						echo '<a class="nav-link" href='.$session_href.'>'.$session_menu.'</a>'
+					?>
 				</li>
 			</ul>
 		</div>

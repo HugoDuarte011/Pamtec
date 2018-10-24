@@ -1,39 +1,46 @@
 <?php
-    // Carregamento do banco de dados
-    include('pt-db.php');
+session_start();
 
-    // Requisição da URL
-    $REQUEST_URI = filter_input(INPUT_SERVER, 'REQUEST_URI');
+// Carregamento do banco de dados
+include('pt-db.php');
 
-    $INITE = strpos($REQUEST_URI, '?');
-    if($INITE) {
-        $REQUEST_URI = substr($REQUEST_URI, 0, $INITE);
-    }
-    $REQUEST_URI_FOLDER = substr($REQUEST_URI, 1);
+$msg = '';
 
-    $URL = explode('/', $REQUEST_URI_FOLDER);
-    $URL[0] = ($URL[0] != '' ? $URL[0] : 'home');
+// Requisição da URL
+$REQUEST_URI = filter_input(INPUT_SERVER, 'REQUEST_URI');
 
-    switch($URL[0]){
-        case 'home';
-            $title = "Início";
-            break;
+$INITE = strpos($REQUEST_URI, '?');
+if($INITE) {
+    $REQUEST_URI = substr($REQUEST_URI, 0, $INITE);
+}
+$REQUEST_URI_FOLDER = substr($REQUEST_URI, 1);
 
-        case 'calibracao';
-            $title = "Calibração";
-            break;
-        
-        case 'contato';
-            $title = "Contato";
-            break;
+$URL = explode('/', $REQUEST_URI_FOLDER);
+$URL[0] = ($URL[0] != '' ? $URL[0] : 'home');
 
-        case 'login';
-            $title = 'Login';
-            break;
-    }
+switch($URL[0]){
+    case 'home';
+        $title = "Início";
+        break;
 
-    $menu = $title;
+    case 'calibracao';
+        $title = "Calibração";
+        break;
+    
+    case 'contato';
+        $title = "Contato";
+        break;
 
+    case 'login';
+        $title = 'Login';
+        break;
+    
+    case 'Admin_Page';
+        $title = 'Admin';
+        break;
+}
+
+$menu = $title;
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
