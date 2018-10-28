@@ -2,6 +2,8 @@
     // Carregamento do banco de dados
     include('pt-db.php');
 
+    session_start();
+
     // Requisição da URL
     $REQUEST_URI = filter_input(INPUT_SERVER, 'REQUEST_URI');
 
@@ -29,6 +31,14 @@
 
         case 'login';
             $title = 'Login';
+            break;
+
+        case 'Admin_Page';
+            $title = 'Admin';
+            break;
+        
+        case 'Lista_Arquivos_Download';
+            $title = "Lista de Arquivos para Download";
             break;
     }
 

@@ -1,8 +1,3 @@
-<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
 <div class="well">
     <table class="table">
       <thead>
@@ -16,7 +11,7 @@
       <tbody>
         <tr>
           <?php 
-          $sql = mysqli_query($connection, "SELECT * FROM arquivos where destinatario = usuario_corrente or destinatario = todos_usuarios");
+          $sql = mysqli_query($connection, "SELECT * FROM apswp_arquivos where destinatario = usuario_corrente or destinatario = todos_usuarios");
           while ($row = $sql->fetch_assoc()){
           ?>
           <td>Arquivo</td>

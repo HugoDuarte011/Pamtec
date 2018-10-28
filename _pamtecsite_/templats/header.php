@@ -22,7 +22,26 @@
 					<a class="nav-link" href='contato'>Contato</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href='login'>Login</a>
+				<?php
+						$session_menu = '';
+						$session_href = '';
+
+						// Contrução do Menu para o Admin / Cliente
+						if(isset($_SESSION['user_id'])) {
+							if($_SESSION['user_permission'] === 1){
+								$session_menu = 'Admin';
+								$session_href = 'Admin_Page';
+							} else {
+								$session_menu = 'login';
+								$session_href = 'login';
+							}
+						} else {
+							$session_menu = 'login';
+							$session_href = 'login';
+						}
+						
+						echo '<a class="nav-link" href='.$session_href.'>'.$session_menu.'</a>'
+					?>
 				</li>
 			</ul>
 		</div>

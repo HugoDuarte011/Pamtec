@@ -6,19 +6,28 @@
 
 require('pt-config.php');
 
-/* Database name MySQL */
-$servername = DB_HOST;
 
-/* Database host MySQL */
-$database = DB_NAME;
+//$conn = mysqli_connect($servername,$username,$password, $database);
 
-/* Database user MySQL */
-$username = DB_USER;
+function connection_MySql(){
 
-/* Database password MySQL */
-$password = DB_PASSWORD;
+    /* Database name MySQL */
+    $servername = DB_HOST;
 
-$conn = mysqli_connect($servername,$username,$password, $database);
+    /* Database host MySQL */
+    $database = DB_NAME;
+
+    /* Database user MySQL */
+    $username = DB_USER;
+
+    /* Database password MySQL */
+    $password = DB_PASSWORD;
+
+    $conn = mysqli_connect($servername,$username,$password, $database);
+
+    return $conn;
+}
+
 if (mysqli_connect_errno()) die(mysqli_connect_error());
 
 // Criar uma página de falha de conexão

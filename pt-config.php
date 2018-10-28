@@ -18,6 +18,15 @@ define('DB_USER', 'pamtec1');
 /** MySQL database password */
 define('DB_PASSWORD', 'oT3@5@8H');
 
+/* 
+pamtec.adm@gmail.com
+hugo1234
+
+outro banco 
+pamtec_admin
+oT3@5@8H
+*/
+
 /** MySQL hostname */
 define('DB_HOST', 'pamtec1.mysql.uhserver.com');
 

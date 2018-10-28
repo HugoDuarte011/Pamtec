@@ -13,10 +13,10 @@
 
 		<form id="Login" action="" method="post">
 			<div class="form-group">
-				<input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email">
+				<input type="text" class="form-control" id="email" name="email" placeholder="Email">
 			</div>
 			<div class="form-group">
-				<input type="password" class="form-control" id="txtSenha" name="txtSenha" placeholder="Senha">
+				<input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
 			</div>
 					
 			<button type="submit" class="btn btn-primary" name="btnLogar">Logar</button>
