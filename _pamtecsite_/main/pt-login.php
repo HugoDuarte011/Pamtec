@@ -52,7 +52,9 @@ class Login {
             $this->permission = $user->user_permission;
         } else
             $this->permission = 2; // RETORNO COM ERRO NO LOGIN
-    
+        
+        $this->conn->close();
+        
         return $this->permission;
     }
 
@@ -107,7 +109,7 @@ function Acessar($email, $senha){
 }
 
 // Se existir sessão, verifica qual página deve carregar
-if(isset($_SESSION['user_id'])){
+if(isset($_SESSION['user_id']) && isset($_SESSION['user_permission'])){
     if($_SESSION['user_permission'] === 1){
         header("Location: Admin_Page");
     } else {

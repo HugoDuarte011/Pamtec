@@ -9,9 +9,9 @@
 				</div>
 			</ul>
 		</div>
-
-		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-			<ul class="navbar-nav ml-auto">
+		
+		<div class="navbar-collapse collapse w-100 order-1 dual-collapse2">
+			<ul id="menu" class="navbar-nav clearfix">
 				<li class="nav-item">
 					<a class="nav-link" href='home'>Início</a>
 				</li>
@@ -23,24 +23,50 @@
 				</li>
 				<li class="nav-item">
 				<?php
-						$session_menu = '';
-						$session_href = '';
-
+						$menu_session = '';
+						$href = '';
+						$drop = '';
+						$option = 0;
+						
 						// Contrução do Menu para o Admin / Cliente
-						if(isset($_SESSION['user_id'])) {
+						if(isset($_SESSION['user_id']) && isset($_SESSION['user_permission'])) {
+
 							if($_SESSION['user_permission'] === 1){
-								$session_menu = 'Admin';
-								$session_href = 'Admin_Page';
+								$menu_session = 'Admin';
+								$href = 'Admin_Page';
+								$option = 1;
 							} else {
-								$session_menu = 'login';
-								$session_href = 'login';
+								$menu_session = 'Certificados';
+								$href = 'Lista_Arquivos_Download';
+								$option = 2;
 							}
-						} else {
-							$session_menu = 'login';
-							$session_href = 'login';
 						}
 						
-						echo '<a class="nav-link" href='.$session_href.'>'.$session_menu.'</a>'
+						switch($option) {
+							case 1;
+								$drop = '<ul>
+											<li class="nav-item"><a href="Admin_Page">Configurações</a></li>
+											<li class="nav-item"><a href="Sair">Sair</a></li>
+											<li class="nav-item"><a href="#"></a></li>
+										</ul>
+										';
+								break;
+							case 2;
+								$drop = '<ul>
+											<li class="nav-item"><a href="Lista_Arquivos_Download">Certificados</a></li>
+											<li class="nav-item"><a href="Sair">Sair</a></li>
+											<li class="nav-item"><a href="#"></a></li>
+										</ul>
+										';
+								break;
+							default:
+								$menu_session = 'Login';
+								$href = 'login';
+								break;
+						}
+
+						echo '<a class="nav-link" href='.$href.'>'.$menu_session.'</a>';
+						echo $drop;
 					?>
 				</li>
 			</ul>

@@ -1,13 +1,12 @@
 <?php
 /**
- * Configurações da conexão com servidor
- *
+ * @param DB_HOST $servername 
+ * @param DB_NAME $database 
+ * @param DB_USER $username
+ * @param DB_PASSWORD $password
  */
 
 require('pt-config.php');
-
-
-//$conn = mysqli_connect($servername,$username,$password, $database);
 
 function connection_MySql(){
 
@@ -23,13 +22,10 @@ function connection_MySql(){
     /* Database password MySQL */
     $password = DB_PASSWORD;
 
+    if (mysqli_connect_errno()) die(mysqli_connect_error());
     $conn = mysqli_connect($servername,$username,$password, $database);
 
     return $conn;
 }
-
-if (mysqli_connect_errno()) die(mysqli_connect_error());
-
-// Criar uma página de falha de conexão
 
 ?>
