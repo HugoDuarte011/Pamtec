@@ -23,6 +23,8 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   height: 150px;
   clear:both;
   padding-top:20px;
+  bottom: 0;
+  left: 0;
 }
 
 /* Alteração do Bootstrap */
@@ -221,4 +223,19 @@ html[xmlns] .clearfix { display: block; }
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
 }

@@ -97,7 +97,7 @@
 
     <?php
         // Incluindo o cabeçalho da página
-        include(ROUTER . 'footer.html');
+        include(ROUTER . 'footer.php');
     ?>
 
     <!-- Scripts -->
