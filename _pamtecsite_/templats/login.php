@@ -1,4 +1,3 @@
-<h1 class="form-heading">login Form</h1>
 <div class="login-form">
 	<div class="main-div">
 		<div class="panel">

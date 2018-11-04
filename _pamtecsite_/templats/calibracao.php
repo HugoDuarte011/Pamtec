@@ -1,37 +1,39 @@
-<h3 style="text-align: center;">Laboratoriais</h3>
+<h2>Laboratoriais</h2>
 </br>
-<p style="text-align: center;">– Agitadores de Placas;</p>
-<p style="text-align: center;">– Agitadores de Tubos;</p>
-<p style="text-align: center;">– Balanças Analíticas e Semi Analíticas; </p>
-<p style="text-align: center;">– Centrifugas;</p>
-<p style="text-align: center;">– Centrifugas de Placas; </p>
-<p style="text-align: center;">– Estufas de Cultura e Secagem;</p>
-<p style="text-align: center;">– Estufas de Gás Carbônico; </p>
-<p style="text-align: center;">– Micro Centrifugas;</p>
-<p style="text-align: center;">– Micro Pipetas; </p>
-<p style="text-align: center;">– Pipetas Multicanais;</p>
-<p style="text-align: center;">– Pipetas de Repetição; </p>
-<p style="text-align: center;">– Termocicladores; </p>
-<p style="text-align: center;">– Termômetros.</p>
+<p >– Micro Pipetas; </p>
+<img src='\IMG\pipeta-150x150.jpg'>
+<p>– Pipetas Multicanais;</p>
+<p>– Pipetas de Repetição; </p>
+<p>– Agitadores de Placas;</p>
+<p>– Agitadores de Tubos;</p>
+<p>– Balanças Analíticas e Semi Analíticas; </p>
+<p>– Centrifugas;</p>
+<p>– Centrifugas de Placas; </p>
+<p>– Estufas de Cultura e Secagem;</p>
+<p>– Estufas de Gás Carbônico; </p>
+<p>– Micro Centrifugas;</p>
+<p>– Termocicladores; </p>
+<p>– Termômetros.</p>
 </br>
-<h3 style="text-align: center;">Teste de Função Pulmonar</h3>
+<h2>Teste de Função Pulmonar</h3>
 </br>
-<img src='Seringa-150x150' style="align: center;">
-<p style="text-align: center;">– Espirômetros; </p>
-<p style="text-align: center;">– Ventilometro</p>
-<p style="text-align: center;">– Seringas de Calibração.</p>
+<img src='\IMG\Seringa-150x150.jpg'>
+<p>– Seringas de Calibração.</p>
+<p>– Espirômetros; </p>
+<p>– Ventilometro</p>
 </br>
-<h3 style="text-align: center;">Hospitalares</h3>
+
+<h2>Hospitalares</h3>
 </br>
-<p style="text-align: center;">– Eletrocardiógrafos; </p>
-<p style="text-align: center;">– Desfibriladores;</p>
-<p style="text-align: center;">– Garrotes Pneumáticos; </p>
-<p style="text-align: center;">– Monitores de Gases;</p>
-<p style="text-align: center;">– Monitores Multiparamétricos; </p>
-<p style="text-align: center;">– Ventiladores Pulmonares;</p>
-<p style="text-align: center;">– Raquimanômetros.</p>
+<p>– Monitores de Gases;</p>
+<img src='\IMG\monitor-multiparametrico-mx-600-emai_1641-150x150.jpg'>
+<p>– Monitores Multiparamétricos; </p>
+<p>– Eletrocardiógrafos; </p>
+<p>– Desfibriladores;</p>
+<p>– Garrotes Pneumáticos; </p>
+<p>– Ventiladores Pulmonares;</p>
+<p>– Raquimanômetros.</p>
 </br>
-<p style="text-align: center;">Serviço Autorizado GBI -GAlIX</p>
-<p style="text-align: center;">Desde 2012 somos prestadores de serviços autorizados da GBI (Galix Biomedical Instrumentation), empresa fabricante de marcapassos, gravadores de holter e equipamentos de monitoração cardíaca.</p>
-</br>
-<h3 style="text-align: center;">http://www.galix-gbi.com</h3>
+<p>Serviço Autorizado GBI -GALIX</p>
+<img src='\IMG\marcapasso_temporario-150x150.jpg'>
+<p>Desde 2012 somos prestadores de serviços autorizados da <a href="http://www.galix-gbi.com" style="text-align: center;">GBI (Galix Biomedical Instrumentation)</a>, empresa fabricante de marcapassos, gravadores de holter e equipamentos de monitoração cardíaca.</p>
