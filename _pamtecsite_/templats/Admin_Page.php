@@ -2,7 +2,7 @@
 <p>Selecione o tipo de registro que será visualizado: </p>
 
 <div class="tab">
-   <button class="tablinks" onclick="tipoRegistro(event, 'Clientes')">Clientes</button>
+   <button id="tabCliente" class="tablinks" onclick="tipoRegistro(event, 'Clientes')">Clientes</button>
    <button class="tablinks" onclick="tipoRegistro(event, 'Certificados')">Certificados</button>
 </div>
 
@@ -10,18 +10,19 @@
    <div class="w3-container">
       <h2>Lista de Usuários para edição</h2>
       <div class="btn-toolbar">
-         <button class="btn btn-primary">
-            <a href='Cadastrar_Clientes'>
-               Novo Usuário
-            </a>
-         </button>
+            <a href='?ecod=0'>
+            <button class="btn btn-primary">Novo Usuário</button>
+         </a>
       </div>
       <table class="w3-table w3-striped w3-border">
             <thead>
                   <tr>
-                        <th>Nome</th>
+                        <th>ID</th>
+                        <th>Razão Social</th>
+                        <th>Fantasia</th>
                         <th>CNPJ</th>
                         <th>Email</th>
+                        <th colspan="2">Ação</th>
                   </tr>
             </thead>
             <tbody>
@@ -36,15 +37,17 @@
                               foreach($user as $campo => $value){
                                     echo "
                                           <tr>
+                                                <td>{$campo}</td>
                                                 <td>{$value['nome']}</td>
+                                                <td>{$value['fantasia']}</td>
                                                 <td>{$value['cnpj']}</td>
                                                 <td>{$value['email']}</td>
                                                 <td>
                                                       
-                                                      <a href='Cadastrar_Cliente?ecod={$campo}'>
+                                                      <a href='?ecod={$campo}'>
                                                             <i class='fa fa-pencil' aria-hidden='true'></i>
                                                       </a>
-                                                      <a href='Cadastrar_Cliente?dcod={$campo}' role='button' data-toggle='modal'>
+                                                      <a href='?dcod={$campo}'>
                                                             <i class='fa fa-trash' aria-hidden='true'></i>
                                                       </a>
                                                 </td>
@@ -63,12 +66,13 @@
       <h2>Lista de certificados para edição</h2>
       <table class="w3-table w3-striped w3-border">
          <div class="btn-toolbar">
-            <button class="btn btn-primary">
-                  <a href='Postar_Certificado'>Novo Certificado</a>
-            </button>
+            <a href='Postar_Certificado'>
+                  <button class="btn btn-primary">Novo Certificado</button>
+            </a>
          </div>
             <thead>
                   <tr>
+                        <th>ID</th>
                         <th>Nome</th>
                         <th>Destinatário</th>
                         <th>Data de Upload</th>
@@ -79,13 +83,14 @@
                         if(!isset($certificate) || $certificate == ''){
                               echo "
                                     <tr>
-                                          <td colspan='5'>Nenhum Certificado cadastrado</td>
+                                          <td colspan='6'>Nenhum Certificado cadastrado</td>
                                     </tr>
                               ";
                         } else {
                               foreach($certificate as $campo => $value){
                                     echo "
                                           <tr>
+                                                <td>{$campo}</td>
                                                 <td>{$value['nome_arquivo']}</td>
                                                 <td>{$value['nome_cliente']}</td>
                                                 <td>{$value['data_inclusao']}</td>
@@ -117,5 +122,6 @@
    	document.getElementById(tipoReg).style.display = "block";
    	evt.currentTarget.className += " active";
    }
+         
+   document.getElementById("tabCliente").click();
 </script>
-

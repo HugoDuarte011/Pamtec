@@ -75,11 +75,6 @@ class Login {
         return $password;
     }
 
-    public function decrypt_password($pass){
-        if(!isset($pass)) return(false);
-        $password_descrypt = openssl_decrypt($pass, 'AES-128-CBC', SECURE_AUTH_KEY, 0, LOGGED_IN_KEY);
-        return json_decode($password_descrypt, true);
-    }
 }
 
 // Verifica se passou o e-mail e senha
