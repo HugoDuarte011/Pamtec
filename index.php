@@ -33,7 +33,7 @@
             $title = 'Login';
             break;
 
-        case 'Lista_Arquivos_Download';
+        case 'Download';
             $title = "Lista de Arquivos para Download";
             break;
     }
@@ -61,7 +61,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/png" href="IMG/favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="IMG/FAVICON - Preto Fundo Branco.png"/>
 
     <!-- PAMTEC CSS -->
     <link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
@@ -69,36 +69,33 @@
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
-    <?php
-        // Incluindo o cabeçalho da página
-        include(ROUTER . 'header.php');
-    ?>
+	<div class="grid-container">
+		
+		<div class="grid-header">
+			<?php
+				// Incluindo o cabeçalho da página
+				include(ROUTER . 'header.php');
+			?>
+		</div>
 
-    <div class="col-xs-12">
-        <div class="col-sm-3 text-center">
-            <h1 class="entry-title">
-                <?php 
-                    echo $menu;
-                ?>
-            </h1>
-        </div>
-        <div class="col-sm-09">
-        </div>
-    </div>
-
-    <div class="container">
-        
-        <?php
-            // Estrutura para carregar as páginas dinamicamente
-            include('ROUTER.PHP');
-        ?>
-        
-    </div>
-
-    <?php
-        // Incluindo o cabeçalho da página
-        include(ROUTER . 'footer.php');
-    ?>
+		<div class="grid-body" style="padding: 10px 10px;">
+			<div class="container">
+				
+				<?php
+					// Estrutura para carregar as páginas dinamicamente
+					include('ROUTER.PHP');
+				?>
+				
+			</div>
+		</div>
+		
+		<div class="grid-footer">
+			<?php
+				// Incluindo o cabeçalho da página
+				include(ROUTER . 'footer.php');
+			?>
+		</div>
+	</div>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
