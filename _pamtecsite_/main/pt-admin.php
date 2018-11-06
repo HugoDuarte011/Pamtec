@@ -194,7 +194,7 @@
             $sth->execute();
             return $sth->insert_id > 0;
         }
-
+        
         /**
          * @param ID $ID do Usuário para ser Deletado
          */
@@ -220,32 +220,16 @@
             return $existe;
         }
 
-
-    }
-
-    // Verifica se tem acesso na página
-    if(isset($_SESSION['user_id']) && isset($_SESSION['user_permission'])){
-        $user_id = $_SESSION['user_id'];
-        
-        $conn = connection_MySql();
-        $administrador = new Administrador($user_id, $conn);
-        if(!$administrador->Verifica_Restricao())
-            header("Location: home");
-        else {
-            /**
-             * Controle do Usuário
-             * @param ecod ID do Usuário para Inclusão/Alterar
-             * @param dcod ID do Usuário para ser Deletado
-             * 
-             * Controle do Certificado
-             * @param ecer ID do Certificado para Inclusão/Alterar
-             * @param dcer ID do Certificado para ser Deeltado
-             */
+        /**
+         * Controle do Usuário
+         * @param ecod ID do Usuário para Inclusão/Alterar
+         * @param dcod ID do Usuário para ser Deletado
+         */
+        public function CRUD_Cliente(){
+            
             if(isset($_GET["ecod"])){
-                $id = $_GET["ecod"];
-
-                if(is_numeric($id)) {
-
+                $user_id = $_GET["ecod"];
+                if(is_numeric($user_id)) {
                     $titleCliente = "Cadastrar Cliente";
                     $btnSubmit = "Cadastrar";
                     $new_user = "";
@@ -262,7 +246,7 @@
                     // Mensagem de validação
                     $validacao_cliente = "";
 
-                    switch($id){
+                    switch($user_id){
                         case 0:
                             $acao = "A";
 
@@ -276,13 +260,13 @@
                                 $senha = $_POST['senha'];
                                 $confirmaSenha = $_POST['confirmaSenha'];
 
-                                if($administrador->Verifica_Login($login)){
+                                if($this->Verifica_Login($login)){
                                     $validacao_cliente = "Login informado já está em uso";
                                 } else if($senha <> $confirmaSenha){
                                     $validacao_cliente = "Senhas informadas não conferem"; 
                                 } else {
                                     // Cadastro do Usuário
-                                    $retorno = $administrador->Incluir_Usuario($razao, $fantasia, $email, $cnpj, $login, $senha, $permissao);
+                                    $retorno = $this->Incluir_Usuario($razao, $fantasia, $email, $cnpj, $login, $senha, $permissao);
                                     if($retorno){
                                         header("Location: Admin_Page");
                                     } else {
@@ -297,7 +281,7 @@
 
                         case $id > 0;
                             // Verifica se o cliente existe
-                            $new_user = $administrador->Retorna_Usuario($id);
+                            $new_user = $this->Retorna_Usuario($id);
                             if(isset($new_user)){
                                 $acao = "M";
 
@@ -307,7 +291,7 @@
                                 $fantasia = $new_user->user_nicename;
                                 $email = $new_user->user_email;
                                 $login = $new_user->user_login;
-                                $senha_decode = $administrador->decrypt_password(base64_decode($new_user->user_pass));
+                                $senha_decode = $this->decrypt_password(base64_decode($new_user->user_pass));
                                 $senha = $senha_decode['password'];
                                 $cnpj = $new_user->user_cnpj;
                                 $permissao = $new_user->user_permission;
@@ -321,11 +305,11 @@
                                     $login = $_POST['login'];
                                     $senha = $_POST['senha'];
 
-                                    if($administrador->Verifica_Login($login)){
+                                    if($this->Verifica_Login($login)){
                                         $validacao_cliente = "Login informado já está em uso";
                                     } else {
                                         // Alteração do Usuário
-                                        $retorno = $administrador->Alterar_Usuario($id, $razao, $fantasia, $email, $cnpj, $login, $senha, $permissao);
+                                        $retorno = $this->Alterar_Usuario($id, $razao, $fantasia, $email, $cnpj, $login, $senha, $permissao);
                                         if($retorno){
                                             header("Location: Admin_Page");
                                         } else {
@@ -346,33 +330,92 @@
                     }
     
                 } else {
-                    // Lista de Usuários e Certificados
-                    $user = $administrador->Carregar_Usuarios();
-                    $certificate = $administrador->Carregar_Certificados();
-            
                     // Página do Admin
-                    include(ROUTER . 'Admin_Page.php');    
+                    header("Location: Admin_Page");
                 }
                 
             } else if(isset($_GET["dcod"])){
                 $delete = $_GET["dcod"];
                 if(is_numeric($delete)) {
-                    $deletado = $administrador->Delete_Usuario($delete);
-                    if($deletado){
-                        header("Location: Admin_Page");
-                    } else {
-                        // Retorno que o usuário informado não existe
-                        header("Location: Admin_Page");
-                    }
+                    $deletado = $this->Delete_Usuario($delete);
                 }
-             
-            } else if(isset($_GET['ecer'])) {
-                $id = $_GET["ecer"];
-                if(is_numeric($id)) {
+            }
 
+        }
+
+        /**
+         * Controle do Usuário
+         * @param certificate_id ID do Certificado para Inclusão/Alterar
+         * @param delete_certificate_id ID do Certificado para ser Deletado
+         */
+        public function CRUD_Certificado(){
+            // Controle Alteração/Inclusão do Certificado
+            if(isset($_GET["certificate_id"])){
+                $certificate_id = $_GET["certificate_id"];
+                if(!is_numeric($certificate_id)) header("Location: Admin_Page");
+                
+                // Campos do Arquivo
+                $arquivo = '';
+                $dataInclusao = '';
+                $cliente = 0;
+                $nomeArquivo = '';
+
+                // Mensagem de validação
+                $validacaoCertificado = "";
+
+                switch($certificate_id){
+                    case 0:
+                        // Ação que o CRUD está realizando
+                        $acao = "A";
+
+                        // Requisão de inclusão
+                        if(isset($_POST['btnPostarCertificado'])){
+
+                        }
+
+                        // Página de cadastro de Cliente
+                        include(ROUTER . 'Cadastrar_Certificado.php');
+                        break;
+                    case $certificate_id > 0:
+                        break;
+
+                    default:
+                        // Ver depois como informar que o Certificado informado não existe
+                        break;
                 }
 
-            } else {
+
+            } else if(isset($_GET["certificate_id"])){
+
+            }
+
+        }
+
+        
+    }
+
+    // Verifica se tem acesso na página
+    if(isset($_SESSION['user_id']) && isset($_SESSION['user_permission'])){
+        $user_id = $_SESSION['user_id'];
+        
+        $conn = connection_MySql();
+        $administrador = new Administrador($user_id, $conn);
+        if(!$administrador->Verifica_Restricao())
+            header("Location: home");
+        else {
+            
+            if(isset($_POST["btnCancelarAdmin"]))
+                header("Location: Admin_Page");
+
+            // CRUD do Cliente
+            if(isset($_GET['ecod'])) $administrador->CRUD_Cliente();
+            else if(isset($_GET['dcod'])) $administrador->CRUD_Cliente();
+
+            // CRUD do Certificado
+            else if(isset($_GET['certificate_id'])) $administrador->CRUD_Certificado();
+            else if(isset($_GET['delete_certificate_id'])) $administrador->CRUD_Certificado();
+
+            else {
                 // Lista de Usuários e Certificados
                 $user = $administrador->Carregar_Usuarios();
                 $certificate = $administrador->Carregar_Certificados();

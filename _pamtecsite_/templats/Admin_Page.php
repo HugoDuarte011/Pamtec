@@ -14,7 +14,7 @@
             <button class="btn btn-primary">Novo Usuário</button>
          </a>
       </div>
-	  </br>
+	  <br />
       <table class="w3-table w3-striped w3-border">
             <thead>
                   <tr>
@@ -23,7 +23,8 @@
                         <th>Fantasia</th>
                         <th>CNPJ</th>
                         <th>Email</th>
-                        <th colspan="2">Ação</th>
+                        <th>Editar</th>
+						<th>Deletar</th>
                   </tr>
             </thead>
             <tbody>
@@ -31,7 +32,7 @@
 					if(!isset($user) || $user == ''){
 						echo "
 							<tr>
-								<td colspan='5'>Nenhum Cliente Cadastrado</td>
+								<td colspan='6'>Nenhum Cliente Cadastrado</td>
 							</tr>
 						";
 					} else {
@@ -47,6 +48,8 @@
 										<a href='?ecod={$campo}'>
 											<i class='fa fa-pencil' aria-hidden='true'></i>
 										</a>
+									</td>
+									<td>
 										<a href='?dcod={$campo}'>
 											<i class='fa fa-trash' aria-hidden='true'></i>
 										</a>
@@ -64,11 +67,11 @@
    <div class="w3-container">
 		<h2>Lista de certificados para edição</h2>
 		<div class="btn-toolbar">
-			<a href='?ecod=0'>
+			<a href='?certificate_id=0'>
 				<button class="btn btn-primary">Novo Certificado</button>
 			</a>
 		</div>
-		</br>
+		<br/>
 		<table class="w3-table w3-striped w3-border">
             <thead>
                   <tr>
@@ -76,7 +79,8 @@
                         <th>Nome</th>
                         <th>Destinatário</th>
                         <th>Data de Upload</th>
-                        <th colspan="2">Ação</th>
+                        <th>Editar</th>
+						<th>Deletar</th>
                   </tr>
             </thead>
             <tbody>
@@ -84,7 +88,7 @@
 					if(!isset($certificate) || $certificate == ''){
 						echo "
 							<tr>
-								<td colspan='5'>Nenhum Certificado cadastrado</td>
+								<td colspan='6'>Nenhum Certificado cadastrado</td>
 							</tr>
 						";
 					} else {
@@ -96,10 +100,12 @@
 									<td>{$value['nome_cliente']}</td>
 									<td>{$value['data_inclusao']}</td>
 									<td>
-										<a href='?ecod={$campo}'>
+										<a href='?certificate_id={$campo}'>
 											<i class='fa fa-pencil' aria-hidden='true'></i>
 										</a>
-										<a href='?dcod={$campo}'>
+									</td>
+									<td>
+										<a href='?delete_certificate_id={$campo}'>
 											<i class='fa fa-trash' aria-hidden='true'></i>
 										</a>
 									</td>

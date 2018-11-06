@@ -49,5 +49,5 @@
 	?>
 
 	<button type="submit" name="btnCliente" class="btn btn-primary"><?php echo $btnSubmit ?></button>
-	<button type="submit" name="btnCancelarCliente" class="btn btn-primary">Cancelar</button>
+	<button type="submit" name="btnCancelarAdmin" class="btn btn-primary" formnovalidate>Cancelar</button>
 </form>

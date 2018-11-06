@@ -1,26 +1,28 @@
 <h1 style="text-align: center; padding: 5px 5px; margin: 5px 5px;">Cadastrar Certificado</h1>
 
-<input  type="file" value="Arquivo" accept="application/pdf">
+<form action="" method="post">
+	<input type="file" name="certificado" value="Arquivo" accept="application/pdf">
 
-</br>
+	<br/>
 
-<select>
-	<option value="0">Todos</option>
-		<?php
-			if(!isset($user) || $user == ''){
-				  echo "
-					
-				  ";
-			} else {
-				  foreach($user as $campo => $value){
-						echo "
-							<option value={$campo}>{$value['fantasia']}</option>
-						";
-				  }
-			}
-		?>
-</select>
+	<select>
+		<option value="0">Todos</option>
+			<?php
+				if(!isset($user) || $user == ''){
+					echo "
+						
+					";
+				} else {
+					foreach($user as $campo => $value){
+							echo "
+								<option value={$campo}>{$value['fantasia']}</option>
+							";
+					}
+				}
+			?>
+	</select>
 
-</br>
+	<br/>
 
-<input type="submit" value="Postar Certificado">
+	<input type="submit" name="btnPostarCertificado" value="Postar Certificado">
+</form>
