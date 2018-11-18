@@ -24,6 +24,9 @@ if(file_exists(ROUTER . $URL[0] . '.php')){
         case 'Admin_Page';
             require(ROUTER . '../main/pt-admin.php' );
             break;
+        case 'Download';
+            require(ROUTER . '../main/pt-download-files.php' );
+            break;
         default:
             include_once(ROUTER . $URL[0] . '.php');
             break;

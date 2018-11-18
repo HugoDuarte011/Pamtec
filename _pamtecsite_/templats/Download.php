@@ -1,3 +1,5 @@
+<h1 style="text-align: center; padding: 5px 5px; margin: 5px 5px;">Certificados</h1>
+
 <div class="well">
 	<table class="table">
 		<thead>
@@ -12,7 +14,7 @@
 				if(!isset($certificate) || $certificate == ''){
 					echo "
 						<tr>
-							  <td colspan='6'>Nenhum Certificado cadastrado</td>
+							  <td colspan='3'>Nenhum Certificado cadastrado</td>
 						</tr>
 					";
 				} else {
@@ -22,7 +24,9 @@
 									<td>{$value['nome_arquivo']}</td>
 									<td>{$value['data_inclusao']}</td>
 									<td>
-										  <a href='#myModal' role='button' data-toggle='modal'>Remover</a>
+										<a href='?download={$campo}'>
+											<img src='img/download.png' />
+										</a>
 									</td>
 							  </tr>";
 						

@@ -46,12 +46,12 @@
 									<td>{$value['email']}</td>
 									<td>
 										<a href='?ecod={$campo}'>
-											<i class='fa fa-pencil' aria-hidden='true'></i>
+											<img src='img/pen01.png' />
 										</a>
 									</td>
 									<td>
 										<a href='?dcod={$campo}'>
-											<i class='fa fa-trash' aria-hidden='true'></i>
+											<img src='img/trash01.png' />
 										</a>
 									</td>
 								</tr>";    
@@ -101,12 +101,12 @@
 									<td>{$value['data_inclusao']}</td>
 									<td>
 										<a href='?certificate_id={$campo}'>
-											<i class='fa fa-pencil' aria-hidden='true'></i>
+											<img src='img/pen01.png' />
 										</a>
 									</td>
 									<td>
 										<a href='?delete_certificate_id={$campo}'>
-											<i class='fa fa-trash' aria-hidden='true'></i>
+											<img src='img/trash01.png' />
 										</a>
 									</td>
 								</tr>";    

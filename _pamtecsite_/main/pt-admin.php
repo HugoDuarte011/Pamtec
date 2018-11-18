@@ -124,12 +124,32 @@
             $sql = "SELECT * FROM apswp_users WHERE ID = ?";
 
             $sth = $this->conn->prepare($sql);
-            $sth->bind_param("s", $id);
+            $sth->bind_param("i", $id);
             $sth->execute();
             $result = $sth->get_result();
             $new_user = $result->fetch_object();
             
             return $new_user;
+        }
+
+        /** 
+        * @param ID $certificate_id do Certificado para carregar os dados do Certificado
+        */
+        public function Retorna_Certificado($certificate_id){
+            $sql = "SELECT 
+                        arq.*
+                        ,COALESCE(user.user_nicename, '') AS nome
+                    FROM 
+                        apswp_arquivos AS arq 
+                    LEFT JOIN apswp_users AS user ON user.ID = arq.fk_cliente
+                    WHERE arq.ID = ?";
+
+            $sth = $this->conn->prepare($sql);
+            $sth->bind_param("i", $certificate_id);
+            $sth->execute();
+            $result = $sth->get_result();
+            $object = $result->fetch_object();
+            return $object;
         }
 
         /** 
@@ -204,6 +224,78 @@
             $sth->bind_param("i", $ID);
             $sth->execute();
             return $sth->affected_rows > 0;
+        }
+
+        /** 
+        * @param nome_arquivo $nome_arquivo do arquivo
+        * @param tamanho_documento $tamanho_documento tamanho do arquivo 
+        * @param arquivo $dados do arquivo
+        * @param fk_cliente $cliente do arquivo
+        *
+        * Função para Alterar o Certificado
+        */
+        public function Alterar_Certificado($ID, $nome_arquivo, $tamanho_documento, $dados, $cliente) {
+            $sql = "UPDATE apswp_arquivos SET
+                nome_arquivo = ?,
+                tamanho_documento = ?,
+                arquivo = ?,
+                fk_cliente = ?
+                WHERE ID = ?
+            ";
+
+            $sth = $this->conn->prepare($sql);
+            $sth->bind_param("sisii", $nome_arquivo, $tamanho_documento, $dados, $cliente, $ID);
+            $sth->execute();
+
+            return $sth->affected_rows > 0;
+        }
+
+
+        /** 
+        * @param nome_arquivo $nome_arquivo do arquivo
+        * @param tamanho_documento $tamanho_documento tamanho do arquivo 
+        * @param arquivo $dados do arquivo
+        * @param fk_cliente $cliente do arquivo
+        *
+        * Função para Cadastrar o Certificado
+        */
+        public function Cadastrar_Certificado($nome_arquivo, $tamanho_documento, $dados, $cliente) {
+            $sql = "INSERT INTO apswp_arquivos (
+                nome_arquivo,
+                tamanho_documento,
+                arquivo,
+                fk_cliente,
+                data_inclusao
+                )
+                VALUES
+                (?,?,?,?, NOW())
+            ";
+            
+            $sth = $this->conn->prepare($sql);
+            $sth->bind_param("sisi", $nome_arquivo, $tamanho_documento, $dados, $cliente);
+            $sth->execute();
+            return $sth->insert_id > 0;
+        }
+
+         /**
+         * @param ID $ID do Certificado para ser Deletado
+         */
+        public function Delete_Certificado($ID){
+            $sql = "DELETE FROM apswp_arquivos WHERE ID = ?";
+            $sth = $this->conn->prepare($sql);
+            $sth->bind_param("i", $ID);
+            $sth->execute();
+            return $sth->affected_rows > 0;
+        }
+
+        /**
+         * @param fk_cliente $user_id verifica se o cliente passado existe
+         */
+        public function Verifica_Cliente($user_id){
+            $sql = "SELECT * FROM apswp_users WHERE ID = ?";
+            $sth = $this->conn->prepare($sql);
+            $sth->bind_param("i", $user_id);
+            return $sth->num_rows > 0;
         }
 
         /**
@@ -337,7 +429,9 @@
             } else if(isset($_GET["dcod"])){
                 $delete = $_GET["dcod"];
                 if(is_numeric($delete)) {
-                    $deletado = $this->Delete_Usuario($delete);
+                    if($this->Delete_Usuario($delete)){
+                        header("Location: Admin_Page");
+                    }
                 }
             }
 
@@ -354,11 +448,14 @@
                 $certificate_id = $_GET["certificate_id"];
                 if(!is_numeric($certificate_id)) header("Location: Admin_Page");
                 
+                $titleCertificate = "Cadastrar Certificado";
+
                 // Campos do Arquivo
                 $arquivo = '';
-                $dataInclusao = '';
+                $tamanho_documento = 0;
                 $cliente = 0;
                 $nomeArquivo = '';
+                $nome = '';
 
                 // Mensagem de validação
                 $validacaoCertificado = "";
@@ -370,13 +467,110 @@
 
                         // Requisão de inclusão
                         if(isset($_POST['btnPostarCertificado'])){
+                            $arquivo_temp = $_FILES["certificado"]["tmp_name"];
+                            $nome_arquivo =  $_FILES["certificado"]["name"];
+                            $ext = pathinfo($nome_arquivo, PATHINFO_EXTENSION);
+                            $cliente = $_POST['cliente'];
+                            $arquivo = isset($_FILES["certificado"]) ? $_FILES["certificado"] : FALSE;
+                            
+                            if($nome_arquivo === ''){
+                                $validacaoCertificado = "Selecione um arquivo";
+                            } else if(strtoupper($ext) <> 'PDF'){
+                                $validacaoCertificado = "Arquivo selecionado no formato inválido, formato aceito apenas no formato .PDF";
+                            } else if($arquivo){
+                                $fp = fopen($arquivo_temp,"rb");
+                                $dados_documento = fread($fp,filesize($arquivo_temp));
+                                fclose($fp); 
+
+                                $tamanho_documento = $arquivo['size'];
+                                $dados = bin2hex($dados_documento);
+                                
+                                // Cadastro do Certificado
+                                if($this->Verifica_Cliente($cliente)){
+                                    $validacaoCertificado = "Cliente informado não existe";
+                                } else if($cliente == 0 || $cliente <= 0){
+                                    $validacaoCertificado = "Selecione um cliente para ser vinculado o certificado";
+                                } else {
+                                    $retorno = $this->Cadastrar_Certificado($nome_arquivo, $tamanho_documento, $dados, $cliente);
+                                    if($retorno){
+                                        header("Location: Admin_Page");
+                                    } else {
+                                        $validacaoCertificado = "Não foi possível incluir o Certificado";   
+                                    }
+                                }
+                                
+                            } else {
+                                $validacaoCertificado = "Selecione um arquivo válido!";
+                            }
 
                         }
+                        
+                        // Carrega os usuários 
+                        $user = $this->Carregar_Usuarios();
 
                         // Página de cadastro de Cliente
                         include(ROUTER . 'Cadastrar_Certificado.php');
                         break;
                     case $certificate_id > 0:
+                        // Verifica se o cliente existe
+                        $new_certificate = $this->Retorna_Certificado($certificate_id);
+                        
+                        if(isset($new_certificate)){
+                            // Ação que o CRUD está realizando
+                            $acao = "M";
+                            $titleCertificate = "Alterar Certificado";
+
+                            $nomeArquivo = $new_certificate->nome_arquivo;
+                            $tamanho_documento = $new_certificate->tamanho_documento;
+                            $cliente = $new_certificate->fk_cliente;
+                            $arquivo = $new_certificate->arquivo;
+                            $nome = $new_certificate->nome;
+                            $ID = $new_certificate->ID;
+
+                            if(isset($_POST['btnPostarCertificado'])){
+                                $arquivo_temp = $_FILES["certificado"]["tmp_name"];
+                                $nome_arquivo =  $_FILES["certificado"]["name"];
+                                $ext = pathinfo($nome_arquivo, PATHINFO_EXTENSION);
+                                $cliente = $_POST['cliente'];
+                                $arquivo = isset($_FILES["certificado"]) ? $_FILES["certificado"] : FALSE;
+
+                                if($nome_arquivo === ''){
+                                    $validacaoCertificado = "Selecione um arquivo";
+                                } else if(strtoupper($ext) <> 'PDF'){
+                                    $validacaoCertificado = "Arquivo selecionado no formato inválido, formato aceito apenas no formato .PDF";
+                                } else if($arquivo){
+                                    $fp = fopen($arquivo_temp,"rb");
+                                    $dados_documento = fread($fp,filesize($arquivo_temp));
+                                    fclose($fp); 
+
+                                    $tamanho_documento = $arquivo['size'];
+                                    $dados = bin2hex($dados_documento);
+
+                                    // Cadastro do Certificado
+                                    if($this->Verifica_Cliente($cliente)){
+                                        $validacaoCertificado = "Cliente informado não existe";
+                                    } else if($cliente == 0 || $cliente <= 0){
+                                        $validacaoCertificado = "Selecione um cliente para ser vinculado o certificado";
+                                    } else {
+                                        $retorno = $this->Alterar_Certificado($ID, $nome_arquivo, $tamanho_documento, $dados, $cliente);
+                                        if($retorno){
+                                            header("Location: Admin_Page");
+                                        } else {
+                                            $validacaoCertificado = "Não foi possível Alterar o Certificado";   
+                                        }
+                                    }
+                                }
+                            }
+
+                        } else {
+                            // Avisar que o certificado não existe
+                        }
+
+                        // Carrega os usuários 
+                        $user = $this->Carregar_Usuarios();
+
+                        // Página de cadastro de Cliente
+                        include(ROUTER . 'Cadastrar_Certificado.php');
                         break;
 
                     default:
@@ -385,8 +579,13 @@
                 }
 
 
-            } else if(isset($_GET["certificate_id"])){
-
+            } else if(isset($_GET["delete_certificate_id"])){
+                $delete = $_GET["delete_certificate_id"];
+                if(is_numeric($delete)) {
+                    if($this->Delete_Certificado($delete)){
+                        header("Location: Admin_Page");
+                    }
+                }
             }
 
         }

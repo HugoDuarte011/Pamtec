@@ -34,7 +34,7 @@
 								$option = 1;
 							} else {
 								$menu_session = 'Certificados';
-								$href = 'Lista_Arquivos_Download';
+								$href = 'Download';
 								$option = 2;
 							}
 						}
@@ -50,7 +50,7 @@
 								break;
 							case 2;
 								$drop = '<ul>
-											<li class="nav-item"><a href="Lista_Arquivos_Download">Certificados</a></li>
+											<li class="nav-item"><a href="Download">Certificados</a></li>
 											<li class="nav-item"><a href="Sair">Sair</a></li>
 											<li class="nav-item"><a href="#"></a></li>
 										</ul>
