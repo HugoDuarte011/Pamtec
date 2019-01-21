@@ -1,45 +1,7 @@
 <?php
-    // Carregamento do banco de dados
-    include('pt-db.php');
-
-    session_start();
-
-    // Requisição da URL
-    $REQUEST_URI = filter_input(INPUT_SERVER, 'REQUEST_URI');
-
-    $INITE = strpos($REQUEST_URI, '?');
-    if($INITE) {
-        $REQUEST_URI = substr($REQUEST_URI, 0, $INITE);
-    }
-    $REQUEST_URI_FOLDER = substr($REQUEST_URI, 1);
-
-    $URL = explode('/', $REQUEST_URI_FOLDER);
-    $URL[0] = ($URL[0] != '' ? $URL[0] : 'home');
-
-    switch($URL[0]){
-        case 'home';
-            $title = "Início";
-            break;
-
-        case 'calibracao';
-            $title = "Calibração";
-            break;
-        
-        case 'contato';
-            $title = "Contato";
-            break;
-
-        case 'login';
-            $title = 'Login';
-            break;
-
-        case 'Download';
-            $title = "Lista de Arquivos para Download";
-            break;
-    }
-
-    $menu = @$title;
-
+// Inicialização do Sistema
+include_once('_pamtecsite_/controller/main.php');        
+$main = new Main();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -74,7 +36,7 @@
 		<div class="grid-header">
 			<?php
 				// Incluindo o cabeçalho da página
-				include(ROUTER . 'header.php');
+				$main->getHeader();
 			?>
 		</div>
 
@@ -83,7 +45,7 @@
 				
 				<?php
 					// Estrutura para carregar as páginas dinamicamente
-					include('ROUTER.PHP');
+					$main->getPage();
 				?>
 				
 			</div>
@@ -91,8 +53,8 @@
 		
 		<div class="grid-footer">
 			<?php
-				// Incluindo o cabeçalho da página
-				include(ROUTER . 'footer.php');
+                // Incluindo o rodapé da página
+				$main->getFooter();
 			?>
 		</div>
 	</div>

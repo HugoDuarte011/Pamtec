@@ -4,7 +4,7 @@
 			<h2>Login</h2>
 		</div>
 
-		<?php 
+		<?php
 			if(isset($msg)){
 				echo $msg;
 			}

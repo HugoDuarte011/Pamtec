@@ -10,10 +10,12 @@
 
 // ** MySQL settings ** //
 /** The name of the database */
-define('DB_NAME', 'pamtec1');
+//define('DB_NAME', 'pamtec1');
+define('DB_NAME', 'pamtec_adm');
 
 /** MySQL database username */
-define('DB_USER', 'pamtec1');
+//define('DB_USER', 'pamtec1');
+define('DB_USER', 'pamtec_admin');
 
 /** MySQL database password */
 define('DB_PASSWORD', 'oT3@5@8H');
@@ -28,7 +30,8 @@ oT3@5@8H
 */
 
 /** MySQL hostname */
-define('DB_HOST', 'pamtec1.mysql.uhserver.com');
+//define('DB_HOST', 'pamtec1.mysql.uhserver.com');
+define('DB_HOST', 'pamtec-adm.mysql.uhserver.com');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8mb4');
