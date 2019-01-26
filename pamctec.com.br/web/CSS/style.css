@@ -1,0 +1,300 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+}
+
+.grid-header { grid-area: header; }
+.grid-body { grid-area: main; }
+.grid-footer { 
+	grid-area: footer;
+	bottom: 0;
+	left: 0;
+	width: 100%
+}
+
+.grid-container {
+	min-height: 100%;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	grid-template-columns: 100%;
+	grid-template-areas:
+		'header header header'
+		'main main main'
+		'footer footer footer';
+}
+
+.html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-image: radial-gradient(#ffffff, #00faff);
+}
+
+html{
+	height: 100%;
+}
+
+#wrap {
+  min-height: 100%;
+}
+
+#main {
+  overflow:auto;
+  padding-bottom:150px;
+}
+
+/* Alteração do Bootstrap */
+.navbar {
+    background-color: #1e73be !important;
+}
+
+.navbar li {
+    text-align: right;
+}
+
+.navbar a{
+	display: block;
+    color: #fff;
+    float: right;
+	border-right: 0;
+	border-left: 0;
+}
+
+/* Login */
+.form-heading { color:#fff; font-size:23px;}
+.panel h2{ color:#444444; font-size:18px; margin:0 0 8px 0;}
+.panel p { color:#777777; font-size:14px; margin-bottom:30px; line-height:24px;}
+.login-form .form-control {
+  background: #f7f7f7 none repeat scroll 0 0;
+  border: 1px solid #d4d4d4;
+  font-size: 14px;
+  height: 50px;
+  line-height: 50px;
+}
+.main-div {
+  background: #ffffff none repeat scroll 0 0;
+  border-radius: 2px;
+  margin: 10px auto 30px;
+  max-width: 42%;
+  padding: 50px 70px 70px 71px;
+}
+
+.login-form .form-group {
+  margin-bottom:10px;
+}
+.login-form{ text-align:center;}
+.forgot a {
+  color: #777777;
+  font-size: 14px;
+  text-decoration: underline;
+}
+.login-form  .btn.btn-primary {
+  background: #1e73be none repeat scroll 0 0;
+  border-color: #1e73be;
+  color: #ffffff;
+  font-size: 14px;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  padding: 0;
+}
+.forgot {
+  text-align: left; margin-bottom:30px;
+}
+.botto-text {
+  color: #ffffff;
+  font-size: 14px;
+  margin: auto;
+}
+.login-form .btn.btn-primary.reset {
+  background: #1e73be none repeat scroll 0 0;
+}
+.back { text-align: left; margin-top:10px;}
+.back a {color: #444444; font-size: 13px;text-decoration: none;}
+
+/* Menu */
+
+nav {
+  height: 70px;  
+}
+
+#menu {
+  display: block;
+  z-index: 99;
+}
+
+#menu li {
+  display: block;
+  float: left;
+}
+
+#menu li a {
+  display: block;
+  float: left;
+  padding: 24px 8px ;
+  line-height: 70px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #f5f5f5;
+  font-family: Helvetica, 'Trebuchet MS', Tahoma, sans-serif;
+  line-height: 1;
+  font-size: 16px;
+}
+
+#menu li a:hover, #menu li a.active {
+  color: #d3e7ed;
+}
+
+#menu li a:active{
+  color: #d3e7ed;
+}
+
+#menu li ul {
+  display: none;
+  top: 70px;
+  width: 200px;
+  background: #fff;
+  z-index: -1;
+  -webkit-box-shadow: 0 2px 7px rgba(0,0,0,0.45);
+  -moz-box-shadow: 0 2px 7px rgba(0,0,0,0.45);
+  box-shadow: 0 2px 7px rgba(0,0,0,0.45);
+}
+#menu li ul li {
+  display: block !important;
+  width: 200px !important;
+}
+#menu li ul li a {
+  text-align: left !important;
+  display: block !important;
+  float: none !important;
+  color: #4e5b67 !important;
+  font-family: Helvetica, 'Trebuchet MS', Tahoma, sans-serif;
+  line-height: 60px !important;
+  padding: 0 15px !important;
+}
+#menu li ul li a:hover {
+  background: #384958;
+  color: #fff !important;
+}
+
+#menu li ul.expanded {
+  width: 400px !important;
+}
+#menu li ul.expanded li { margin-right: 200px !important; }
+
+
+#menu li ul li ul {
+  display: none;
+  left: 0px !important;
+  top: 0;
+  height: 100%;
+  background: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/** clearfix **/
+.clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+.clearfix { display: inline-block; }
+ 
+html[xmlns] .clearfix { display: block; }
+* html .clearfix { height: 1%; }
+
+/* Admin */
+.btn {
+  color: #fff !important;
+}
+.tab {
+  overflow: hidden;
+  border: 1px solid #1e73be;
+  background-color: #1e73be;
+  color: #fff;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+  color: #fff;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #1d22c1;
+  color: #fff;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #1d22c1;
+  color: #fff;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #1e73be !important;
+	border-bottom-color: #1e73be !important;
+	border-top-color: #1e73be;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #1e73be;
+}
+
+.grid-container p{
+	text-align: center;
+	font-size: 18px;
+	width: 100%;
+}
+.grid-container h2{
+	text-align: center;
+	font-weight: bold;	
+}
+.grid-container img{
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input[type="file"]{
+	width: 100%;
+	height: 30px;
+	text-align: center;
+	margin: 10px 10px;
+	position: relative;
+}
+select{
+	width: 50%;
+	height: 30px;
+	text-align: center;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+input[type="submit"]{
+	width: 25%;
+	height: 50px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
