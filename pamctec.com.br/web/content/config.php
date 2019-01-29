@@ -41,7 +41,7 @@ define('DB_COLLATE', '');
 
 /** ROUTER */
 //define('ROUTER', (__DIR__).'/_pamtecsite_/templats/');
-define('ROUTER', (__DIR__).'\\pamtec\\templats\\');
+define('ROUTER', (__DIR__).'\\..\\pamtec\\templats\\');
 
 /**#@+
  * Authentication Unique Keys and Salts.
@@ -59,6 +59,37 @@ define('AUTH_SALT',        'o|0;!NY_BcffA5]m3)vbclc2?or6K1Z(L=4&PVrN{CzWBTYa}};f
 define('SECURE_AUTH_SALT', 'h738#`O8GrMXbdG0`o:;c/39!o;J~QAW>KHF/#zi*u;6)iYfv|A+5L]|X#[y7[,I');
 define('LOGGED_IN_SALT',   '~Hb`&}QFc7J#{kvz;J]vXT(<gIl/G&g8|X0?~zh/kXUAXed/H*A{O4$Rk)%,Qt+[');
 define('NONCE_SALT',       'k!MZk{%PY46P%_|g]cT)*#,DjLacnSOSK{MPd_tMC49O:Fq2$8R!p)-?.-6ZsStD');
+
+/**
+ * @param DB_HOST $servername 
+ * @param DB_NAME $database 
+ * @param DB_USER $username
+ * @param DB_PASSWORD $password
+ */
+
+function connection_MySql(){
+
+    /* Database name MySQL */
+    $servername = DB_HOST;
+
+    /* Database host MySQL */
+    $database = DB_NAME;
+
+    /* Database user MySQL */
+    $username = DB_USER;
+
+    /* Database password MySQL */
+    $password = DB_PASSWORD;
+
+    try{
+        if (mysqli_connect_errno()) die(mysqli_connect_error());
+        $conn = mysqli_connect($servername,$username,$password, $database);
+    } catch(Exception $e) {
+        header("Location: index.php");
+    }
+
+    return $conn;
+}
 
 /**#@-*/
 

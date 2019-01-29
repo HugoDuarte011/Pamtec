@@ -40,9 +40,9 @@ class Login {
         // Se existir sessão, verifica qual página deve carregar
         if(isset($_SESSION['user_id']) && isset($_SESSION['user_permission'])){
             if($_SESSION['user_permission'] === 1)
-                header("Location: admin.php");
+                header("Location: ../Admin/");
             else
-                header("Location: index.php");
+                header("Location: ../index.php");
         }
 
         $msg = $this->msg;
@@ -101,7 +101,7 @@ class Login {
     
         if(isset($permission)){
             if($permission === 0) header("Location: index.php");
-            if($permission === 1) header("Location: admin.php");
+            if($permission === 1) header("Location: ../Admin/");
             if($permission === 2) $retorno = false;
         }
     
