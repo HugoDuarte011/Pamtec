@@ -42,7 +42,7 @@
                     <div class="navbar-collapse collapse w-100 order-1 dual-collapse2">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-home-logo">
-                                <a class="navbar-brand" href="index.php">
+                                <a class="navbar-brand" href="<?php echo $index; ?>">
                                     <img src="<?php echo $logo; ?>" alt="" itemprop="logo" width="100%" height="100%">
                                 </a>
                             </li>
@@ -57,12 +57,24 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="<?php echo $contato; ?>">Contato</a>
                             </li>
+
                             <li class="nav-item">
                             <?php
+                                if(isset($request) && $request === 1){
+                                    echo 
+                                        '<div class="dropdown">
+                                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                '.$caption.'
+                                            </a>';
+                                            echo $drop;
+                                        echo "</div>";
+                                    ;
+                                } else {
                                     echo '<a class="nav-link" href='.$url.'>'.$caption.'</a>';
-                                    echo $drop;
+                                }
                                 ?>
                             </li>
+
                         </ul>
                     </div>
 

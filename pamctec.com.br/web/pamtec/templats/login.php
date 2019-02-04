@@ -1,7 +1,7 @@
 <div class="login-form">
 	<div class="main-div">
 		<div class="panel">
-			<h2>Entrar no sistema</h2>
+			<h2 class="card-title mb-4 mt-1">Entrar no sistema</h2>
 		</div>
 
 		<div style="color: #f00">
@@ -12,7 +12,7 @@
 
 		<form id="Login" action="" method="post">
 			<div class="form-group">
-				<label for="email">Email ou usuário</label>
+				<label for="email">Usuário</label>
 				<input type="text" class="form-control" id="email" name="email" placeholder="Email">
 			</div>
 			<div class="form-group">

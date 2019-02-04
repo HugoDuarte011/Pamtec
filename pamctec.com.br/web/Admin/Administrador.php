@@ -6,6 +6,9 @@
         private $user_permission;
         private $conn;
 
+        private $user;
+        private $certificate;
+        
         //construtor da classe
         public function __construct(){
             $this->conn = connection_MySql();
@@ -47,12 +50,12 @@
                         arq.ID
                         ,coalesce(arq.arquivo, '') as arquivo
                         ,arq.data_inclusao
-                        ,coalesce(arq.fk_cliente, 0) as cliente
+                        ,coalesce(arq.cliente, 0) as cliente
                         ,coalesce(arq.nome_arquivo, '') nome_arquivo
                         ,coalesce(user.display_name, '') as nome_cliente
                     FROM
                         apswp_arquivos as arq
-                    INNER JOIN apswp_users as user on user.ID = arq.fk_cliente
+                    INNER JOIN apswp_users as user on user.ID = arq.cliente
             ";
 
             $sth = $this->conn->prepare($sql);
@@ -82,10 +85,17 @@
                         ,coalesce(user_email, '') as email
                     FROM
                         apswp_users
+                    WHERE
+                        user_permission = 0
             ";
 
-            $sth = $this->conn->prepare($sql);
-            $sth->execute();
+            try {
+                $sth = $this->conn->prepare($sql);
+                $sth->execute();
+            } catch(Exception $e){
+                echo $e->getMessage();
+            }
+
             $result = $sth->get_result();
             $user = '';
             if ($result->num_rows > 0) {
@@ -142,7 +152,7 @@
                         ,COALESCE(user.user_nicename, '') AS nome
                     FROM 
                         apswp_arquivos AS arq 
-                    LEFT JOIN apswp_users AS user ON user.ID = arq.fk_cliente
+                    LEFT JOIN apswp_users AS user ON user.ID = arq.cliente
                     WHERE arq.ID = ?";
 
             $sth = $this->conn->prepare($sql);
@@ -235,23 +245,23 @@
 
         /** 
         * @param nome_arquivo $nome_arquivo do arquivo
-        * @param tamanho_documento $tamanho_documento tamanho do arquivo 
-        * @param arquivo $dados do arquivo
-        * @param fk_cliente $cliente do arquivo
+        * @param pasta $pasta destino do arquivo
+        * @param tamanho_documento $tamanho do arquivo
+        * @param cliente $cliente do arquivo
         *
         * Função para Alterar o Certificado
         */
-        public function Alterar_Certificado($ID, $nome_arquivo, $tamanho_documento, $dados, $cliente) {
+        public function Alterar_Certificado($ID, $nome_arquivo, $pasta, $tamanho, $cliente) {
             $sql = "UPDATE apswp_arquivos SET
                 nome_arquivo = ?,
+                pasta = ?,
                 tamanho_documento = ?,
-                arquivo = ?,
-                fk_cliente = ?
+                cliente = ?
                 WHERE ID = ?
             ";
 
             $sth = $this->conn->prepare($sql);
-            $sth->bind_param("sisii", $nome_arquivo, $tamanho_documento, $dados, $cliente, $ID);
+            $sth->bind_param("ssii", $nome_arquivo, $pasta, $tamanho, $cliente, $ID);
             $sth->execute();
 
             return $sth->affected_rows > 0;
@@ -260,18 +270,18 @@
 
         /** 
         * @param nome_arquivo $nome_arquivo do arquivo
-        * @param tamanho_documento $tamanho_documento tamanho do arquivo 
-        * @param arquivo $dados do arquivo
-        * @param fk_cliente $cliente do arquivo
+        * @param pasta $pasta destino do arquivo
+        * @param tamanho_documento $tamanho do arquivo 
+        * @param cliente $cliente do arquivo
         *
         * Função para Cadastrar o Certificado
         */
-        public function Cadastrar_Certificado($nome_arquivo, $tamanho_documento, $dados, $cliente) {
+        public function Cadastrar_Certificado($nome_arquivo, $pasta, $tamanho, $cliente) {
             $sql = "INSERT INTO apswp_arquivos (
                 nome_arquivo,
+                pasta,
                 tamanho_documento,
-                arquivo,
-                fk_cliente,
+                cliente,
                 data_inclusao
                 )
                 VALUES
@@ -279,7 +289,7 @@
             ";
             
             $sth = $this->conn->prepare($sql);
-            $sth->bind_param("sisi", $nome_arquivo, $tamanho_documento, $dados, $cliente);
+            $sth->bind_param("ssii", $nome_arquivo, $pasta, $tamanho, $cliente);
             $sth->execute();
             return $sth->insert_id > 0;
         }
@@ -319,6 +329,14 @@
             return $existe;
         }
 
+        public function getUser(){
+            return $this->user;
+        }
+
+        public function getCertificate(){
+            return $this->certificate;
+        }
+
         /**
          * Controle do Usuário
          * @param ecod ID do Usuário para Inclusão/Alterar
@@ -326,11 +344,24 @@
          */
         public function CRUD_Cliente(){
             
-            if(isset($_GET["ecod"])){
-                $user_id = $_GET["ecod"];
+            $this->user["razao"] = "";
+            $this->user["fantasia"] = "";
+            $this->user["email"] = "";
+            $this->user["cnpj"] = "";
+            $this->user["login"] = "";
+            $this->user["senha"] = "";
+            $this->user["confirmaSenha"] = "";
+            $this->user["validacao"] = "";
+            $this->user["titulo"] = "";
+            $this->user["acao"] = "";
+            $this->user["botao"] = "";
+            
+            if(isset($_GET["user"])){
+                $user_id = $_GET["user"];
                 if(is_numeric($user_id)) {
-                    $titleCliente = "Cadastrar Cliente";
-                    $btnSubmit = "Cadastrar";
+                    $this->user["titulo"] = "Cadastrar Cliente";
+                    $this->user["botao"] = "Cadastrar";
+
                     $new_user = "";
 
                     // Campos do usuário
@@ -347,7 +378,7 @@
 
                     switch($user_id){
                         case 0:
-                            $acao = "A";
+                            $this->user["acao"] = "A";
 
                             // Validar com lista branca
                             if(isset($_POST["btnCliente"])){
@@ -360,40 +391,36 @@
                                 $confirmaSenha = $_POST['confirmaSenha'];
 
                                 if($this->Verifica_Login($login)){
-                                    $validacao_cliente = "Login informado já está em uso";
+                                    $this->user["validacao"] = "Login informado já está em uso!";
                                 } else if($senha <> $confirmaSenha){
-                                    $validacao_cliente = "Senhas informadas não conferem"; 
+                                    $this->user["validacao"] = "Senhas informadas não conferem"; 
                                 } else {
                                     // Cadastro do Usuário
                                     $retorno = $this->Incluir_Usuario($razao, $fantasia, $email, $cnpj, $login, $senha, $permissao);
                                     if($retorno){
-                                        header("Location: admin.php");
+                                        header("Location: ../Admin/");
                                     } else {
-                                        $validacao_cliente = "Não foi possível inserir o Usuário";
+                                        $this->user["validacao"] = "Não foi possível inserir o Usuário";
                                     }
                                 }
                             }
-
-                            // Página de cadastro de Cliente
-                            include(ROUTER . 'Cadastrar_Clientes.php');
-                            break;
 
                         case $user_id > 0;
                             // Verifica se o cliente existe
                             $new_user = $this->Retorna_Usuario($user_id);
                             if(isset($new_user)){
-                                $acao = "M";
+                                $this->user["acao"] = "M";
 
-                                $btnSubmit = "Alterar";
-                                $titleCliente = "Alterar Cliente";
-                                $razao = $new_user->display_name;
-                                $fantasia = $new_user->user_nicename;
-                                $email = $new_user->user_email;
-                                $login = $new_user->user_login;
+                                $this->user["botao"] = "Alterar";
+                                $this->user["titulo"] = "Alterar Cliente";
+                                
+                                $this->user["razao"] = $new_user->display_name;
+                                $this->user["fantasia"] = $new_user->user_nicename;
+                                $this->user["email"] = $new_user->user_email;
+                                $this->user["login"] = $new_user->user_login;
+                                $this->user["cnpj"] = $new_user->user_cnpj;
                                 $senha_decode = $this->decrypt_password(base64_decode($new_user->user_pass));
-                                $senha = $senha_decode['password'];
-                                $cnpj = $new_user->user_cnpj;
-                                $permissao = $new_user->user_permission;
+                                $this->user["senha"] = $senha_decode['password'];
 
                                 // Validar com lista branca
                                 if(isset($_POST["btnCliente"])){
@@ -405,22 +432,19 @@
                                     $senha = $_POST['senha'];
 
                                     if($this->Verifica_Login($login)){
-                                        $validacao_cliente = "Login informado já está em uso";
+                                        $this->user["validacao"] = "Login informado já está em uso";
                                     } else {
                                         // Alteração do Usuário
                                         $retorno = $this->Alterar_Usuario($user_id, $razao, $fantasia, $email, $cnpj, $login, $senha, $permissao);
                                         if($retorno){
-                                            header("Location: admin.php");
+                                            header("Location: ../Admin/");
                                         } else {
-                                            $validacao_cliente = "Não foi possível alterar o Usuário";
+                                            $this->user["validacao"] = "Não foi possível alterar o Usuário";
                                         }
                                     }
 
                                 }
 
-                                // Página de cadastro de Cliente
-                                include(ROUTER . 'Cadastrar_Clientes.php');
-                                break;
                             } else
                                 // Dar mensagem de que o usuário informado não existe
                             break;
@@ -430,14 +454,14 @@
     
                 } else {
                     // Página do Admin
-                    header("Location: admin.php");
+                    header("Location: ../Admin/");
                 }
                 
-            } else if(isset($_GET["dcod"])){
-                $delete = $_GET["dcod"];
+            } else if(isset($_GET["user_del"])){
+                $delete = $_GET["user_del"];
                 if(is_numeric($delete)) {
                     if($this->Delete_Usuario($delete)){
-                        header("Location: admin.php");
+                        header("Location: ../Admin/");
                     }
                 }
             }
@@ -446,124 +470,116 @@
 
         /**
          * Controle do Usuário
-         * @param certificate_id ID do Certificado para Inclusão/Alterar
+         * @param certificate ID do Certificado para Inclusão/Alterar
          * @param delete_certificate_id ID do Certificado para ser Deletado
          */
         public function CRUD_Certificado(){
             // Controle Alteração/Inclusão do Certificado
-            if(isset($_GET["certificate_id"])){
-                $certificate_id = $_GET["certificate_id"];
-                if(!is_numeric($certificate_id)) header("Location: Admin_Page");
+            if(isset($_GET["certificate"])){
+                $certificate_id = $_GET["certificate"];
+                if(!is_numeric($certificate_id)) header("Location: ../Admin/");
                 
-                $titleCertificate = "Cadastrar Certificado";
+                $this->certificate["titulo"]        = "Cadastrar Certificado";
+                $fomatosPermitidos                  = array("PDF");
+
+                // Carrega os usuários 
+                $this->certificate["user"]          = $this->Carregar_Usuarios();
 
                 // Campos do Arquivo
-                $arquivo = '';
-                $tamanho_documento = 0;
-                $cliente = 0;
-                $nomeArquivo = '';
-                $nome = '';
+                $this->certificate["arquivo"]       = "";
+                $this->certificate["nomeArquivo"]   = "";
+                $this->certificate["nome"]          = "";
+                $this->certificate["novoNome"]      = "";
+                $this->certificate["pasta"]         = "../pamtec/upload/";
+                $this->certificate["cliente"]       = 0;
+                $this->certificate["tamanho"]       = 0;
 
                 // Mensagem de validação
-                $validacaoCertificado = "";
+                $this->certificate["validacao"]     = "";
 
                 switch($certificate_id){
                     case 0:
-                        // Ação que o CRUD está realizando
-                        $acao = "A";
-
                         // Requisão de inclusão
                         if(isset($_POST['btnPostarCertificado'])){
-                            $arquivo_temp = $_FILES["certificado"]["tmp_name"];
-                            $nome_arquivo =  $_FILES["certificado"]["name"];
-                            $ext = pathinfo($nome_arquivo, PATHINFO_EXTENSION);
-                            $cliente = $_POST['cliente'];
-                            $arquivo = isset($_FILES["certificado"]) ? $_FILES["certificado"] : FALSE;
-                            
-                            if($nome_arquivo === ''){
-                                $validacaoCertificado = "Selecione um arquivo";
-                            } else if(strtoupper($ext) <> 'PDF'){
-                                $validacaoCertificado = "Arquivo selecionado no formato inválido, formato aceito apenas no formato .PDF";
-                            } else if($arquivo){
-                                $fp = fopen($arquivo_temp,"rb");
-                                $dados_documento = fread($fp,filesize($arquivo_temp));
-                                fclose($fp); 
+                            $cliente        = $_POST['cliente'];
 
-                                $tamanho_documento = $arquivo['size'];
-                                $dados = bin2hex($dados_documento);
-                                
+                            $arquivo_temp   = $_FILES["certificado"]["tmp_name"];
+                            $nome_arquivo   = $_FILES["certificado"]["name"];
+                            $tamanho        = $_FILES["certificado"]["size"];
+
+                            $extensao       = pathinfo($nome_arquivo, PATHINFO_EXTENSION);
+                            $novoNome       = uniqid().".$extensao";
+                            $arquivo        = isset($_FILES["certificado"]) ? $_FILES["certificado"] : FALSE;
+                            // verificar o por que não está validando quando vazio
+                            if($nome_arquivo === "" || empty($nome_arquivo)){
+                                $this->certificate["validacao"] = "Selecione um arquivo";
+                            } else if(!in_array(strtoupper($extensao), $fomatosPermitidos)){
+                                $this->certificate["validacao"] = "Arquivo selecionado no formato inválido, formato aceito apenas no formato .PDF";
+                            } else if($arquivo){
                                 // Cadastro do Certificado
-                                if($this->Verifica_Cliente($cliente)){
-                                    $validacaoCertificado = "Cliente informado não existe";
-                                } else if($cliente == 0 || $cliente <= 0){
-                                    $validacaoCertificado = "Selecione um cliente para ser vinculado o certificado";
+                                } if($cliente == 0 || $cliente <= 0){
+                                    $this->certificate["validacao"] = "Selecione um cliente para ser vinculado o certificado";
+                                } else if($this->Verifica_Cliente($cliente)){
+                                    $this->certificate["validacao"] = "Cliente informado não existe"; 
                                 } else {
-                                    $retorno = $this->Cadastrar_Certificado($nome_arquivo, $tamanho_documento, $dados, $cliente);
-                                    if($retorno){
-                                        header("Location: admin.php");
+                                    // Upload de arquivo
+                                    if(move_uploaded_file($arquivo_temp, $this->certificate["pasta"].$novoNome)){
+                                        if($this->Cadastrar_Certificado($novoNome, $this->certificate["pasta"], $tamanho, $cliente)){
+                                            header("Location: ../Admin/");
+                                        } else {
+                                            $this->certificate["validacao"] = "Não foi possível incluir o Certificado";   
+                                        } 
                                     } else {
-                                        $validacaoCertificado = "Não foi possível incluir o Certificado";   
+                                        $this->certificate["validacao"] = "Erro, não foi possível fazer o upload.";
                                     }
                                 }
-                                
-                            } else {
-                                $validacaoCertificado = "Selecione um arquivo válido!";
-                            }
-
                         }
-                        
-                        // Carrega os usuários 
-                        $user = $this->Carregar_Usuarios();
 
-                        // Página de cadastro de Cliente
-                        include(ROUTER . 'Cadastrar_Certificado.php');
-                        break;
                     case $certificate_id > 0:
                         // Verifica se o cliente existe
                         $new_certificate = $this->Retorna_Certificado($certificate_id);
                         
                         if(isset($new_certificate)){
                             // Ação que o CRUD está realizando
-                            $acao = "M";
-                            $titleCertificate = "Alterar Certificado";
+                            $this->certificate["titulo"]        = "Alterar Certificado";
 
-                            $nomeArquivo = $new_certificate->nome_arquivo;
-                            $tamanho_documento = $new_certificate->tamanho_documento;
-                            $cliente = $new_certificate->fk_cliente;
-                            $arquivo = $new_certificate->arquivo;
-                            $nome = $new_certificate->nome;
-                            $ID = $new_certificate->ID;
+                            $this->certificate["nomeArquivo"]   = $new_certificate->nome_arquivo;
+                            $this->certificate["pasta"]         = $new_certificate->pasta;
+                            $this->certificate["tamanho"]       = $new_certificate->tamanho_documento;
+                            $this->certificate["cliente"]       = $new_certificate->cliente;
+                            $this->certificate["nome"]          = $new_certificate->nome;
+                            $this->certificate["ID"]            = $new_certificate->ID;
 
                             if(isset($_POST['btnPostarCertificado'])){
-                                $arquivo_temp = $_FILES["certificado"]["tmp_name"];
-                                $nome_arquivo =  $_FILES["certificado"]["name"];
-                                $ext = pathinfo($nome_arquivo, PATHINFO_EXTENSION);
-                                $cliente = $_POST['cliente'];
-                                $arquivo = isset($_FILES["certificado"]) ? $_FILES["certificado"] : FALSE;
+                                $arquivo_temp   = $_FILES["certificado"]["tmp_name"];
+                                $nome_arquivo   = $_FILES["certificado"]["name"];
+                                $tamanho        = $_FILES["certificado"]["size"];
+                                $cliente        = $_POST['cliente'];
+
+                                $extensao       = pathinfo($nome_arquivo, PATHINFO_EXTENSION);
+                                $novoNome       = uniqid().".$extensao";
+                                $arquivo        = isset($_FILES["certificado"]) ? $_FILES["certificado"] : FALSE;
 
                                 if($nome_arquivo === ''){
-                                    $validacaoCertificado = "Selecione um arquivo";
-                                } else if(strtoupper($ext) <> 'PDF'){
-                                    $validacaoCertificado = "Arquivo selecionado no formato inválido, formato aceito apenas no formato .PDF";
+                                    $this->certificate["validacao"] = "Selecione um arquivo";
+                                } else if(!in_array(strtoupper($extensao), $fomatosPermitidos)){
+                                    $this->certificate["validacao"] = "Arquivo selecionado no formato inválido, formato aceito apenas no formato .PDF";
                                 } else if($arquivo){
-                                    $fp = fopen($arquivo_temp,"rb");
-                                    $dados_documento = fread($fp,filesize($arquivo_temp));
-                                    fclose($fp); 
-
-                                    $tamanho_documento = $arquivo['size'];
-                                    $dados = bin2hex($dados_documento);
-
                                     // Cadastro do Certificado
-                                    if($this->Verifica_Cliente($cliente)){
-                                        $validacaoCertificado = "Cliente informado não existe";
-                                    } else if($cliente == 0 || $cliente <= 0){
-                                        $validacaoCertificado = "Selecione um cliente para ser vinculado o certificado";
+                                    if($cliente == 0 || $cliente <= 0){
+                                        $this->certificate["validacao"] = "Selecione um cliente para ser vinculado o certificado";
+                                    } else if($this->Verifica_Cliente($cliente)){
+                                        $this->certificate["validacao"] = "Cliente informado não existe";
                                     } else {
-                                        $retorno = $this->Alterar_Certificado($ID, $nome_arquivo, $tamanho_documento, $dados, $cliente);
-                                        if($retorno){
-                                            header("Location: admin.php");
+                                        // Upload de arquivo
+                                        if(move_uploaded_file($arquivo_temp, $this->certificate["pasta"].$novoNome)){
+                                            if($this->Alterar_Certificado($ID, $novoNome, $this->certificate["pasta"], $tamanho, $cliente)){
+                                                header("Location: ../Admin/");
+                                            } else {
+                                                $this->certificate["validacao"] = "Não foi possível Alterar o Certificado";   
+                                            }
                                         } else {
-                                            $validacaoCertificado = "Não foi possível Alterar o Certificado";   
+                                            $this->certificate["validacao"] = "Erro, não foi possível fazer o upload.";
                                         }
                                     }
                                 }
@@ -572,13 +588,6 @@
                         } else {
                             // Avisar que o certificado não existe
                         }
-
-                        // Carrega os usuários 
-                        $user = $this->Carregar_Usuarios();
-
-                        // Página de cadastro de Cliente
-                        include(ROUTER . 'Cadastrar_Certificado.php');
-                        break;
 
                     default:
                         // Ver depois como informar que o Certificado informado não existe
@@ -590,20 +599,11 @@
                 $delete = $_GET["delete_certificate_id"];
                 if(is_numeric($delete)) {
                     if($this->Delete_Certificado($delete)){
-                        header("Location: admin.php");
+                        header("Location: ../Admin/");
                     }
                 }
             }
 
-        }
-
-        // Sair do Sistema
-        public function sair(){
-            session_start();
-
-            session_destroy();
-
-            header("Location: index.php");
         }
 
         // Controle de carregamento da página
@@ -618,38 +618,31 @@
                     
                     if(isset($_POST["btnCancelarAdmin"]))
                         // Encaminha para a página do Admin
-                        header("Location: ");
+                        header("Location: ../Admin/");
 
                     // CRUD do Cliente
-                    if(isset($_GET['ecod'])) $this->CRUD_Cliente();
-                    else if(isset($_GET['dcod'])) $this->CRUD_Cliente();
+                    if(isset($_GET['user'])) $this->CRUD_Cliente();
+                    else if(isset($_GET['user_del'])) $this->CRUD_Cliente();
 
                     // CRUD do Certificado
-                    else if(isset($_GET['certificate_id'])) $this->CRUD_Certificado();
-                    else if(isset($_GET['delete_certificate_id'])) $this->CRUD_Certificado();
-
-                    // Sair
-                    else if(isset($_GET['sair'])) $this->sair();
-
-                    else {
-                        // Lista de Usuários e Certificados
-                        $user = $this->Carregar_Usuarios();
-                        $certificate = $this->Carregar_Certificados();
-                    
-                        // Página do Admin
-                        header("Location: ");
-                    }
-
-                    // Fecha a conexão
-                    $this->conn->close();
+                    else if(isset($_GET['certificate'])) $this->CRUD_Certificado();
+                    else if(isset($_GET['delete_certificate'])) $this->CRUD_Certificado();
                 }
             } else {
                 header("Location: ../Autenticacao/");
             }
         }
-
-        
     }
 
     $admin = new Administrador();
+    $user = $admin->Carregar_Usuarios();
+    $certificate = $admin->Carregar_Certificados();
+
+    if(isset($_GET['user'])){
+        $user = $admin->getUser();
+    }
+
+    if(isset($_GET['certificate'])) {
+        $certificate = $admin->getCertificate();
+    }
 ?>

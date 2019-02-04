@@ -3,7 +3,7 @@
 
 //$DIR = (__DIR__);
 //$folders = (explode('\\', $DIR));
-$DIR = $REQUEST_URI = filter_input(INPUT_SERVER, 'REQUEST_URI');
+$DIR = filter_input(INPUT_SERVER, 'REQUEST_URI');
 $folders = (explode('/', $DIR));
 
 // Vairicaveis default
@@ -22,6 +22,7 @@ $caption    = '';
 $url        = '';
 $drop       = '';
 $option     = 0;
+$request    = 0;
 
 // Menu
 $index      = 'index.php';
@@ -67,39 +68,46 @@ if($count >= 1){
 
 // Contrução do Menu para o Admin / Cliente
 if(isset($_SESSION['user_id']) && isset($_SESSION['user_permission'])) {
-
     if($_SESSION['user_permission'] === 1){
         $caption = 'Administrador';
         $url = $href . 'Admin/';
         $option = 1;
+        $request = 1;
     } else {
+        // Mudar essa caption para o nome do cliente
         $caption = 'Certificados';
-        $url = 'Download';
+        $url = $href . 'Download/';
         $option = 2;
+        $request = 1;
     }
 }
 
 switch($option) {
     case 1;
-        $drop = '<ul>
-                    <li class="nav-item"><a href="'. $href . 'Admin/">Painel</a></li>
-                    <li class="nav-item"><a href="'. $href . 'Admin/index.php?sair=true">Sair</a></li>
-                    <li class="nav-item"><a href="#"></a></li>
-                </ul>
+        $drop = '
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="'.$url.'">Painel</a>
+                <a class="dropdown-item" href="'.$href.'index.php?logout=true">Sair</a>
+            </div>
                 ';
         break;
     case 2;
-        $drop = '<ul>
-                    <li class="nav-item"><a href="Download">Certificados</a></li>
-                    <li class="nav-item"><a href="Sair">Sair</a></li>
-                    <li class="nav-item"><a href="#"></a></li>
-                </ul>
+        $drop = '
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="'.$url.'">Certificados</a>
+                <a class="dropdown-item" href="'.$href.'index.php?logout=true">Sair</a>
+            </div>
                 ';
         break;
     default:
         $caption = 'Entrar';
         $url = $href . 'Autenticacao/';
         break;
+}
+
+// Sair
+if(isset($_GET['logout'])) {
+    include('pamtec/main/logout.php');
 }
 
 ?>

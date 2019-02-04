@@ -1,158 +1,163 @@
 <?php
 
-    class Download {
-        private $user_id;
-        private $conn;
+class Download {
+    private $permission;
+    private $conn;
 
-        //construtor da classe
-        public function __construct($user_id, $conn){
-            $this->user_id = $user_id;
-            $this->conn = $conn;
-        }
+    private $certificate;
 
-        public function Restricao(){
-            $retricao = false;
+    //construtor da classe
+    public function __construct(){
+        $this->permission = 0;
+        $this->conn = connection_MySql();
 
-            $query = "SELECT user_permission FROM apswp_users WHERE ID = ?";
+        $this->user_id = @$_SESSION['user_id'];
+        $this->user_permission = @$_SESSION['user_permission'];
 
-            $sth = $this->conn->prepare($query);
-            $sth->bind_param("i", $this->user_id);
-            $sth->execute();
-            $result = $sth->get_result();
-            $user = $result->fetch_object();
-
-            if($result->num_rows > 0){
-                if($user->user_permission === 1 || $user->user_permission === 0)
-                    $retricao = true;
-            }
-            
-            return $retricao;
-        }
-
-
-        /** 
-        * @param ID $certificate_id do Certificado para carregar os dados do Certificado
-        *  Carrega a lista dos Certificados
-        */
-        public function Carregar_Certificados($id){
-            $sql = "SELECT
-                        arq.ID
-                        ,coalesce(arq.arquivo, '') as arquivo
-                        ,arq.data_inclusao
-                        ,coalesce(arq.fk_cliente, 0) as cliente
-                        ,coalesce(arq.nome_arquivo, '') nome_arquivo
-                        ,coalesce(user.display_name, '') as nome_cliente
-                    FROM
-                        apswp_arquivos as arq
-                    INNER JOIN apswp_users as user on user.ID = arq.fk_cliente
-                    WHERE
-                        arq.fk_cliente = ?
-            ";
-
-            $sth = $this->conn->prepare($sql);
-            $sth->bind_param("i", $id);
-            $sth->execute();
-            $result = $sth->get_result();
-            $certificate = '';
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_object()){
-                    $certificate[$row->ID]['arquivo'] = utf8_encode($row->arquivo);
-                    $certificate[$row->ID]['data_inclusao'] = utf8_encode($row->data_inclusao);
-                    $certificate[$row->ID]['cliente'] = utf8_encode($row->cliente);
-                    $certificate[$row->ID]['nome_arquivo'] = utf8_encode($row->nome_arquivo);
-                    $certificate[$row->ID]['nome_cliente'] = utf8_encode($row->nome_cliente);
-                }
-            }
-
-            return $certificate;
-        }
-
-        public function hex2bin($str) {
-            $r='';
-
-            for ($a=0; $a<strlen($h); $a+=2) {
-                $r.=chr(hexdec($h{$a}.$h{($a+1)})); 
-            }
-            
-            return $bin;
-        }
-        
-        /** 
-        * @param ID $id do Certificado para o download
-        */
-        public function Download_Certificate($id){
-            if(!is_numeric($id)) return false;
-
-            $sql = "SELECT
-                        arq.ID
-                        ,coalesce(arq.arquivo, '') AS arquivo
-                        ,arq.data_inclusao
-                        ,coalesce(arq.nome_arquivo, '') AS nome_arquivo
-                        ,coalesce(arq.tamanho_documento, 0) AS tamanho_documento
-                    FROM
-                        apswp_arquivos AS arq
-                    WHERE
-                        arq.ID = ?
-            ";
-
-            $sth = $this->conn->prepare($sql);
-            $sth->bind_param("i", $id);
-            $sth->execute();
-            $result = $sth->get_result();
-
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_object()){
-                    $nomeArquivo = utf8_encode($row->nome_arquivo);
-                    $dados_documento =  $row->arquivo;
-
-                    $file = fopen($nomeArquivo,"a+");
-                    fwrite($file,hex2bin($dados_documento));
-                    fclose($file);
-
-                    //Forçando o download...
-                    header("Content-type: application/pdf");
-                    header("Content-Disposition: attachment; filename=" . $nomeArquivo);
-                    header("Content-Length: " . $row->tamanho_documento);
-                    header("Content-Transfer-Encoding: binary");
-                    readfile($nomeArquivo);
-
-                    //Apagando o arquivo
-                    unlink($nomeArquivo); 
-                }
-            }
-
-        } 
-
+        $this->router();
+        $this->submit();
     }
 
-    // Verifica se tem acesso na página
-    if(isset($_SESSION['user_id']) && isset($_SESSION['user_permission'])){
-        $user_id = $_SESSION['user_id'];
+    // Verifica se o usuário possuí acesso
+    public function Restricao(){
+        $retricao = false;
 
-        $conn = connection_MySql();
-        $download = new Download($user_id, $conn);
+        $query = "SELECT user_permission FROM apswp_users WHERE ID = ?";
 
-        if(!$download->Restricao()){
-            header("Location: home");
+        $sth = $this->conn->prepare($query);
+        $sth->bind_param("i", $this->user_id);
+        $sth->execute();
+        $result = $sth->get_result();
+        $user = $result->fetch_object();
+
+        if($result->num_rows > 0){
+            if($user->user_permission === 1 || $user->user_permission === 0)
+                $retricao = true;
         }
         
+        return $retricao;
+    }
+
+    // Verifica se o usuário possuí acesso
+    public function router(){
+
+        // Verifica se tem acesso na página
+        if(isset($this->user_id) && isset($this->user_permission)){
+            if(!$this->Restricao())
+                header("Location: ../");
+        } else {
+            header("Location: ../Download/");
+        }
+    }
+
+    /** 
+    * @param ID $certificate_id do Certificado para carregar os dados do Certificado
+    *  Carrega a lista dos Certificados
+    */
+    public function Carregar_Certificados(){
+        $sql = "SELECT
+                    arq.ID
+                    ,coalesce(arq.arquivo, '') AS arquivo
+                    ,arq.data_inclusao
+                    ,coalesce(arq.cliente, 0) AS cliente
+                    ,coalesce(arq.nome_arquivo, '') AS nome_arquivo
+                    ,coalesce(user.display_name, '') AS nome_cliente
+                FROM
+                    apswp_arquivos AS arq
+                INNER JOIN apswp_users AS user ON user.ID = arq.cliente
+                WHERE
+                    arq.cliente = ?
+        ";
+
+        $sth = $this->conn->prepare($sql);
+        $sth->bind_param("i", $this->user_id);
+        $sth->execute();
+        $result = $sth->get_result();
+        $certificate = "";
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_object()){
+                $certificate[$row->ID]['data_inclusao']   = utf8_encode($row->data_inclusao);
+                $certificate[$row->ID]['cliente']         = utf8_encode($row->cliente);
+                $certificate[$row->ID]['nome_arquivo']    = utf8_encode($row->nome_arquivo);
+                $certificate[$row->ID]['nome_cliente']    = utf8_encode($row->nome_cliente);
+            }
+        }
+
+        return $certificate;
+    }
+
+    public function getCertificados(){
+        return $this->certificate = $this->Carregar_Certificados();
+    }
+    
+    /** 
+    * @param ID $id do Certificado para o download
+    */
+    public function Download_Certificate($id){
+        if(!is_numeric($id)) return FALSE;
+
+        $sql = "SELECT
+                    ID
+                    ,coalesce(arquivo, '') AS arquivo
+                    ,data_inclusao
+                    ,coalesce(nome_arquivo, '') AS nome_arquivo
+                    ,coalesce(pasta, '') AS pasta
+                    ,coalesce(tamanho_documento, 0) AS tamanho_documento
+                FROM
+                    apswp_arquivos
+                WHERE
+                    ID = ?
+        ";
+
+        $sth = $this->conn->prepare($sql);
+        $sth->bind_param("i", $id);
+        $sth->execute();
+        $result = $sth->get_result();
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_object()){
+                $arquivo_nome = "{$row->nome_arquivo}";
+                $pasta = $row->pasta;
+                $tamanho = $row->tamanho_documento;
+                $FILEPATH = $pasta . $arquivo_nome;
+                
+                //Forçando o download...
+                /*header("Cache-Control: public");
+                header("Content-Description: File Transfer");
+                header("Content-Disposition: attachment; filename={$arquivo_nome}");
+                header("Content-Type: application/zip");
+                header("Content-Transfer-Encoding: binary");*/
+                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                header('Content-Type: application/octetstream');
+                header("Content-Transfer-Encoding: Binary");
+                //header("Content-length: ".$tamanho);
+                header("Content-Disposition: attachment; filename={$arquivo_nome}");
+                //header("Content-disposition: attachment; filename=\"".basename($arquivo_nome)."\"");
+
+                // Read the file
+                readfile("$FILEPATH");
+                
+
+                //header("Content-type: application/pdf");
+                //header("Content-Disposition: attachment; filename={$arquivo_nome}");
+                //header("Content-Length: {$tamanho}");
+                //readfile($FILEPATH);
+            }
+        }
+    }
+
+    public function submit(){
         // Download do Certificado
         if(isset($_GET['download'])){
-            $id = $_GET['download'];
-            $download = $download->Download_Certificate($id);
+            $id = filter_input(INPUT_GET, "download", FILTER_DEFAULT);
+            $this->Download_Certificate($id);
         }
-
-        // Lista dos certificados
-        $certificate = $download->Carregar_Certificados($user_id); 
-
-        // Página do Admin
-        include(ROUTER . 'Download.php');
-
-        // Fecha a conexão
-        $conn->close();
-    } else {
-        header("Location: home");
     }
 
+}
+
+$download = new Download();
+$certificate = $download->getCertificados();
 
 ?>

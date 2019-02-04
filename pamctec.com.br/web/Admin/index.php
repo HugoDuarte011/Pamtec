@@ -1,10 +1,11 @@
 <?php
     include_once("../header.php");
-    require("Administrador.php");
+    include("Administrador.php");
 ?>
 
 <div class="grid-body" style="padding: 10px 10px;">
     <div class="container">
+        
     <h2>Tipo de Registro</h2>
         <p>Selecione o tipo de registro que será visualizado: </p>
 
@@ -17,7 +18,7 @@
         <div class="w3-container">
             <h2>Lista de Usuários para edição</h2>
             <div class="btn-toolbar">
-                    <a href='?ecod=0'>
+                    <a href='Cadastrar_Clientes.php?user=0'>
                     <button class="btn btn-primary">Novo Usuário</button>
                 </a>
             </div>
@@ -39,7 +40,7 @@
                             if(!isset($user) || $user == ''){
                                 echo "
                                     <tr>
-                                        <td colspan='6'>Nenhum Cliente Cadastrado</td>
+                                        <td colspan='7'>Nenhum Cliente Cadastrado</td>
                                     </tr>
                                 ";
                             } else {
@@ -52,13 +53,13 @@
                                             <td>{$value['cnpj']}</td>
                                             <td>{$value['email']}</td>
                                             <td>
-                                                <a href='?ecod={$campo}'>
-                                                    <img src='img/pen01.png' />
+                                                <a href='Cadastrar_Clientes.php?user={$campo}'>
+                                                    <img src='../img/pen01.png' />
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href='?dcod={$campo}'>
-                                                    <img src='img/trash01.png' />
+                                                <a href='Cadastrar_Clientes.php?user_del={$campo}'>
+                                                    <img src='../img/trash01.png' />
                                                 </a>
                                             </td>
                                         </tr>";    
@@ -74,7 +75,7 @@
         <div class="w3-container">
                 <h2>Lista de certificados para edição</h2>
                 <div class="btn-toolbar">
-                    <a href='?certificate_id=0'>
+                    <a href='Cadastrar_Certificado.php?certificate=0'>
                         <button class="btn btn-primary">Novo Certificado</button>
                     </a>
                 </div>
@@ -107,13 +108,13 @@
                                             <td>{$value['nome_cliente']}</td>
                                             <td>{$value['data_inclusao']}</td>
                                             <td>
-                                                <a href='?certificate_id={$campo}'>
-                                                    <img src='img/pen01.png' />
+                                                <a href='Cadastrar_Certificado.php?certificate={$campo}'>
+                                                    <img src='../img/pen01.png' />
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href='?delete_certificate_id={$campo}'>
-                                                    <img src='img/trash01.png' />
+                                                <a href='Cadastrar_Certificado.php?delete_certificate={$campo}'>
+                                                    <img src='../img/trash01.png' />
                                                 </a>
                                             </td>
                                         </tr>";    
