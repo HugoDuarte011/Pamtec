@@ -508,7 +508,8 @@
                             $tamanho        = $_FILES["certificado"]["size"];
 
                             $extensao       = pathinfo($nome_arquivo, PATHINFO_EXTENSION);
-                            $novoNome       = uniqid().".$extensao";
+                            //$novoNome       = uniqid().".$extensao";
+                            $novoNome       = $nome_arquivo;
                             $arquivo        = isset($_FILES["certificado"]) ? $_FILES["certificado"] : FALSE;
                             // verificar o por que não está validando quando vazio
                             if($nome_arquivo === "" || empty($nome_arquivo)){
@@ -557,7 +558,8 @@
                                 $cliente        = $_POST['cliente'];
 
                                 $extensao       = pathinfo($nome_arquivo, PATHINFO_EXTENSION);
-                                $novoNome       = uniqid().".$extensao";
+                                //$novoNome       = uniqid().".$extensao";
+                                $novoNome       = $nome_arquivo;
                                 $arquivo        = isset($_FILES["certificado"]) ? $_FILES["certificado"] : FALSE;
 
                                 if($nome_arquivo === ''){
@@ -595,8 +597,8 @@
                 }
 
 
-            } else if(isset($_GET["delete_certificate_id"])){
-                $delete = $_GET["delete_certificate_id"];
+            } else if(isset($_GET["delete_certificate"])){
+                $delete = $_GET["delete_certificate"];
                 if(is_numeric($delete)) {
                     if($this->Delete_Certificado($delete)){
                         header("Location: ../Admin/");

@@ -120,35 +120,29 @@ class Download {
                 $arquivo_nome = "{$row->nome_arquivo}";
                 $pasta = $row->pasta;
                 $tamanho = $row->tamanho_documento;
-                $FILEPATH = $pasta . $arquivo_nome;
                 
-                //Forçando o download...
-                /*header("Cache-Control: public");
-                header("Content-Description: File Transfer");
-                header("Content-Disposition: attachment; filename={$arquivo_nome}");
-                header("Content-Type: application/zip");
-                header("Content-Transfer-Encoding: binary");*/
-                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                header('Content-Type: application/octetstream');
-                header("Content-Transfer-Encoding: Binary");
-                //header("Content-length: ".$tamanho);
-                header("Content-Disposition: attachment; filename={$arquivo_nome}");
-                //header("Content-disposition: attachment; filename=\"".basename($arquivo_nome)."\"");
-
-                // Read the file
-                readfile("$FILEPATH");
+                $filename = (__DIR__) . "\\..\\upload\\" . basename($arquivo_nome);
                 
-
-                //header("Content-type: application/pdf");
-                //header("Content-Disposition: attachment; filename={$arquivo_nome}");
-                //header("Content-Length: {$tamanho}");
-                //readfile($FILEPATH);
+                if (file_exists($filename)){
+                    header('Content-Type: application/octet-stream'); 
+                    header('Content-Disposition: attachment; filename=' . $arquivo_nome); 
+                    header('Content-Transfer-Encoding: binary'); 
+                    header('Expires: 0'); 
+                    header('Cache-Control: must-revalidate, post-check=0, pre-check=0'); 
+                    header('Pragma: public'); 
+                    header('Content-Length: ' . filesize($filename)); 
+                    ob_clean();
+                    flush();
+                    readfile($filename);
+                    exit();
+                }
+                
             }
         }
     }
 
+    // Download do Certificado
     public function submit(){
-        // Download do Certificado
         if(isset($_GET['download'])){
             $id = filter_input(INPUT_GET, "download", FILTER_DEFAULT);
             $this->Download_Certificate($id);
